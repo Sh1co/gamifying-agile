@@ -45,10 +45,19 @@ class ProcessState
     @instance
   end
 
-  def initialize(anom, act, env, prod)
+  def initialize(anom, env, prod)
     @anomalies = anom
-    @actions = act
     @environment = env
     @product = prod
   end
+end
+
+class Process
+  @actions = []
+  @state
+
+  def initialize(act, st)
+    @actions = act
+    @state = st
+  end  
 end
