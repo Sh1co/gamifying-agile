@@ -1,56 +1,27 @@
 class Anomaly
   # @abstract
+end
 
-  def initialize(id)
-    @id = id
-  end
-
-  def getId
-    raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
-  end
-
-  def setId=(id)
-    raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
+class NewRequirement < Anomaly
+  def to_s
+    "'NewRequirement'"
   end
 end
 
-class Bug < Anomaly
-  def getId
-    return @id if @id
-  end
-  def setId=(id)
-    @id = id
+class LackOfDesign < Anomaly
+  def to_s
+    "'LackOfDesign'"
   end
 end
-class Error < Anomaly
-  def getId
-    return @id if @id
-  end
-  def setId=(id)
-    @id = id
+
+class FeatureToImplement < Anomaly
+  def to_s
+    "'FeatureToImplement'"
   end
 end
-class Defect < Anomaly
-  def getId
-    return @id if @id
-  end
-  def setId=(id)
-    @id = id
-  end
-end
-class Faliure < Anomaly
-  def getId
-    return @id if @id
-  end
-  def setId=(id)
-    @id = id
-  end
-end
-class Fault < Anomaly
-  def getId
-    return @id if @id
-  end
-  def setId=(id)
-    @id = id
+
+class UntestedFeature < Anomaly
+  def to_s
+    "'UntestedFeature'"
   end
 end

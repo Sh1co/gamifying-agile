@@ -1,11 +1,9 @@
+require_relative 'anomalies.rb'
+
 class Action
   # @abstract
-  @id
 
-  def initialize(id)
-    @id = id
-  end
-  def applyAction(anomaly)
+  def action_applicable?(anomaly)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 end
@@ -20,27 +18,38 @@ class AdaptiveAction < Action
   # @abstract
 end
 
-class Retrospective < AdaptiveAction
-  def applyAction(anomaly)
-    # Need real implementation
-    puts "Applying #{self.class} to #{anomaly.to_s}"
+class Test < Action
+  def to_s
+    "'Test'"
+  end
+  def action_applicable?(anomaly)
+    anomaly.is_a?(UntestedFeature)
   end
 end
-class WeeklyStandups < AdaptiveAction
-  def applyCorrectiveAction(anomaly)
-    # Need real implementation
-    puts "Applying #{self.class} to #{anomaly.to_s}"
+
+class Code < Action
+  def to_s
+    "'Code'"
+  end
+  def action_applicable?(anomaly)
+    anomaly.is_a?(FeatureToImplement)
   end
 end
-class RestartServer < CorrectiveActions
-  def applyCorrectiveAction(anomaly)
-    # Need real implementation
-    puts "Applying #{self.class} to #{anomaly.to_s}"
+
+class DesignSystem < PreventiveAction
+  def to_s
+    "'DesignSystem'"
+  end
+  def action_applicable?(anomaly)
+    anomaly.is_a?(LackOfDesign)
   end
 end
-class RequirementsAnalysis < PreventiveAction
-  def applyCorrectiveAction(anomaly)
-    # Need real implementation
-    puts "Applying #{self.class} to #{anomaly.to_s}"
+
+class CollectRequirements < PreventiveAction
+  def to_s
+    "'CollectRequirements'"
+  end
+  def action_applicable?(anomaly)
+    anomaly.is_a?(NewRequirement)
   end
 end
