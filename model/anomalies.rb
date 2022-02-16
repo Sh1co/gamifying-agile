@@ -14,7 +14,7 @@ class LackOfDesign < Anomaly
   end
 end
 
-class FeatureToImplement < Anomaly
+class UnimplementedFeature < Anomaly
   def to_s
     "'FeatureToImplement'"
   end

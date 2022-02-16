@@ -32,7 +32,7 @@ class Code < Action
     "'Code'"
   end
   def action_applicable?(anomaly)
-    anomaly.is_a?(FeatureToImplement)
+    anomaly.is_a?(UnimplementedFeature)
   end
 end
 
