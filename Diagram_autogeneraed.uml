@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Ruby</ID>
+  <OriginalElement>ProcessState</OriginalElement>
+  <nodes>
+    <node x="239.0" y="1203.5">ProcessState</node>
+    <node x="175.25" y="367.0">Object</node>
+    <node x="42.5" y="2242.0">Class</node>
+    <node x="22.5" y="0.0">BasicObject</node>
+    <node x="0.0" y="445.0">Module</node>
+    <node x="261.5" y="132.0">Kernel</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Object" target="Kernel" relationship="REALIZATION">
+      <point x="21.5" y="-14.0" />
+      <point x="239.75" y="342.0" />
+      <point x="304.5" y="342.0" />
+      <point x="0.0" y="26.5" />
+    </edge>
+    <edge source="Object" target="BasicObject" relationship="REALIZATION">
+      <point x="-21.5" y="-14.0" />
+      <point x="196.75" y="342.0" />
+      <point x="132.0" y="342.0" />
+      <point x="0.0" y="158.5" />
+    </edge>
+    <edge source="Module" target="Object" relationship="REALIZATION">
+      <point x="0.0" y="-873.5" />
+      <point x="109.5" y="420.0" />
+      <point x="218.25" y="420.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="ProcessState" target="Object" relationship="REALIZATION">
+      <point x="0.0" y="-115.0" />
+      <point x="327.0" y="420.0" />
+      <point x="218.25" y="420.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="Class" target="Module" relationship="REALIZATION">
+      <point x="0.0" y="-26.5" />
+      <point x="0.0" y="873.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.20647948164146868" showDependencies="false" x="207.5" y="1147.5" />
+  <SelectedNodes>
+    <node>ProcessState</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constants</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+</Diagram>
+
