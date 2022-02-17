@@ -41,7 +41,7 @@ class WaterfallState < ProcessState
   def initialize(
     anomalies=Array[],
     actions=Array[],
-    features=Array[RequestedRequirement.new("1"), RequestedRequirement.new("2")],
+    features=Array[RequestedFeature.new("1"), RequestedFeature.new("2")],
     stage=WaterfallStage::REQUIREMENTS_ANALYSIS
   )
     super anomalies, actions, features
@@ -57,8 +57,8 @@ class WaterfallState < ProcessState
         if idx.nil?
           puts "Too early to advance '#{feature.to_s}'. There are still requirements to analyze!"
         else
-          self.analyzed_features.push feature
-          self.requested_features.delete_at self.requested_features.index feature
+          self.analyzed_features.push AnalyzedFeature.new feature.name
+          self.requested_features.delete_at idx
           puts "Advanced '#{feature.to_s}' from analyzing to designing!"
           if self.requested_features.length == 0
             self.stage = WaterfallStage::DESIGN
@@ -71,8 +71,8 @@ class WaterfallState < ProcessState
         if idx.nil?
           puts "Too early to advance '#{feature.to_s}'. There are still features to design!"
         else
-          self.designed_features.push feature
-          self.analyzed_features.delete_at self.analyzed_features.index feature
+          self.designed_features.push DesignedFeature.new feature.name
+          self.analyzed_features.delete_at idx
           puts "Advanced '#{feature.to_s}' from designing to implementing!"
           if self.analyzed_features.length == 0
             self.stage = WaterfallStage::IMPLEMENTATION
@@ -85,8 +85,8 @@ class WaterfallState < ProcessState
         if idx.nil?
           puts "Too early to advance '#{feature.to_s}'. There are still features to implement!"
         else
-          self.implemented_features.push feature
-          self.designed_features.delete_at self.designed_features.index feature
+          self.implemented_features.push ImplementedFeature.new feature.name
+          self.designed_features.delete_at idx
           puts "Advanced '#{feature.to_s}' from implementing to testing!"
           if self.designed_features.length == 0
             self.stage = WaterfallStage::TESTING
@@ -99,8 +99,8 @@ class WaterfallState < ProcessState
         if idx.nil?
           puts "Too early to advance '#{feature.to_s}'. There are still features to test!"
         else
-          self.tested_features.push feature
-          self.implemented_features.delete_at self.implemented_features.index feature
+          self.tested_features.push TestedFeature.new feature.name
+          self.implemented_features.delete_at idx
           puts "Advanced '#{feature.to_s}' from implementing to testing!"
           if self.implemented_features.length == 0
             self.stage = WaterfallStage::MAINTENANCE

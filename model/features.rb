@@ -10,10 +10,10 @@ class Feature
   end
 end
 
-class RequestedRequirement < Feature
+class RequestedFeature < Feature
 end
 
-class AnalyzedRequirement < Feature
+class AnalyzedFeature < Feature
 end
 
 class DesignedFeature < Feature
