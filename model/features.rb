@@ -9,18 +9,3 @@ class Feature
     @name
   end
 end
-
-class RequestedFeature < Feature
-end
-
-class AnalyzedFeature < Feature
-end
-
-class DesignedFeature < Feature
-end
-
-class ImplementedFeature < Feature
-end
-
-class TestedFeature < Feature
-end
