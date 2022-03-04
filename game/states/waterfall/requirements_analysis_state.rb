@@ -43,37 +43,7 @@ class RequirementsAnalysisState < WaterfallState
 
   def update
     if @open_order.nil?
-      if $window.button_down?(Gosu::KbA) && can_move_to?(@hero, @hero.x - SPEED, @hero.y)
-        if @camera.x > WINDOW_WIDTH / 2 && @hero.x < (MAP_WIDTH - WINDOW_WIDTH / 2)
-          @camera.x -= SPEED
-        end
-        @hero.x -= SPEED
-        @hero.w_x = @hero.x - (@camera.x - WINDOW_WIDTH/2)
-      end
-
-      if $window.button_down?(Gosu::KbD) && can_move_to?(@hero, @hero.x + SPEED, @hero.y)
-        if @camera.x < (MAP_WIDTH - WINDOW_WIDTH / 2) && @hero.x > (WINDOW_WIDTH / 2)
-          @camera.x += SPEED
-        end
-        @hero.x += SPEED
-        @hero.w_x = @hero.x - (@camera.x - WINDOW_WIDTH/2)
-      end
-      if $window.button_down?(Gosu::KbW) && can_move_to?(@hero, @hero.x, @hero.y - SPEED)
-        if @camera.y > WINDOW_HEIGHT / 2 && @hero.y < (MAP_HEIGHT - WINDOW_HEIGHT / 2)
-          @camera.y -= SPEED
-        end
-        @hero.y -= SPEED
-        @hero.w_y = @hero.y - (@camera.y - WINDOW_HEIGHT/2)
-      end
-      if $window.button_down?(Gosu::KbS) && can_move_to?(@hero, @hero.x, @hero.y + SPEED)
-        if @camera.y < (MAP_HEIGHT - WINDOW_HEIGHT / 2) && @hero.y > (WINDOW_HEIGHT / 2)
-          @camera.y += SPEED
-        end
-        @hero.y += SPEED
-        @hero.w_y = @hero.y - (@camera.y - WINDOW_HEIGHT/2)
-      end
-
-      @hero.update
+      update_hero_position
     end
   end
 
@@ -84,7 +54,7 @@ class RequirementsAnalysisState < WaterfallState
       @background.draw(0, 0, 0)
       @hero.draw
       @customers.each { |customer| customer.draw }
-      # @portal.draw
+      @cauldron.draw
     end
     unless @open_order.nil?
       @open_order.draw

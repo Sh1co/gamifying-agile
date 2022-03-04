@@ -1,18 +1,13 @@
-require_relative '../../entities/hero'
-require_relative '../../entities/portal'
 require 'gosu'
 require 'gosu_texture_packer'
 require_relative '../../constants'
-require_relative '../../entities/camera'
-require_relative '../../entities/customer'
-require_relative '../../entities/order_request'
-require_relative '../../entities/feature'
-require_relative '../game_state'
-require_relative '../menu_state'
-require_relative './design_state'
 require_relative 'waterfall_state'
+require_relative 'testing_state'
+require_relative '../../entities/ingredient'
 
 class ImplementationState < WaterfallState
+  CAULDRON_WITH_WATER_FILE = Utils.media_path('pot_water.png')
+  CAULDRON_WITH_POTION_FILE = Utils.media_path('pot_potion.png')
 
   def initialize(order, tasks)
     super()
@@ -21,42 +16,64 @@ class ImplementationState < WaterfallState
       Customer.new($window, 1200, 700, @customer_image.frame('customer.png'), nil),
       Customer.new($window, 1200, 900, @customer_image.frame('customer.png'), nil)
     ]
-
+    @cauldron.image = Gosu::Image.new($window, CAULDRON_WITH_WATER_FILE, false)
+    @collectable_ingredients = [
+      CollectableIngredient.new(tasks[0], 2000, 500)
+    ]
+    @order = order
     @features_to_implement = tasks
     @implemented_features = []
+    @collected_ingredients = []
+    @cooked_ingredients = []
+
+    @dragged_object = nil
   end
 
   def update
-    if $window.button_down?(Gosu::KbA) && can_move_to?(@hero, @hero.x - SPEED, @hero.y)
-      if @camera.x > WINDOW_WIDTH / 2 && @hero.x < (MAP_WIDTH - WINDOW_WIDTH / 2)
-        @camera.x -= SPEED
+    update_hero_position
+    @collectable_ingredients.each do |ingredient|
+      if @hero.x + @hero.width > ingredient.x - 5 && @hero.x < ingredient.x + 5 && @hero.y + @hero.height > ingredient.y - 5 && @hero.y < ingredient.y + 5
+        @collected_ingredients.push CollectedIngredient.new(ingredient.ingredient, 25, 310+ 10*(@collected_ingredients.length - 1))
+        @collectable_ingredients.delete_if { |el| el === ingredient }
       end
-      @hero.x -= SPEED
-      @hero.w_x = @hero.x - (@camera.x - WINDOW_WIDTH / 2)
     end
 
-    if $window.button_down?(Gosu::KbD) && can_move_to?(@hero, @hero.x + SPEED, @hero.y)
-      if @camera.x < (MAP_WIDTH - WINDOW_WIDTH / 2) && @hero.x > (WINDOW_WIDTH / 2)
-        @camera.x += SPEED
-      end
-      @hero.x += SPEED
-      @hero.w_x = @hero.x - (@camera.x - WINDOW_WIDTH / 2)
+    unless @dragged_object.nil?
+      @dragged_object.x = $window.mouse_x
+      @dragged_object.y = $window.mouse_y
     end
-    if $window.button_down?(Gosu::KbW) && can_move_to?(@hero, @hero.x, @hero.y - SPEED)
-      if @camera.y > WINDOW_HEIGHT / 2 && @hero.y < (MAP_HEIGHT - WINDOW_HEIGHT / 2)
-        @camera.y -= SPEED
+  end
+
+  def button_down(id)
+    if id == Gosu::MsLeft
+      @collected_ingredients.each do |el|
+        if $window.mouse_x > el.x && $window.mouse_x < el.x + 30 && $window.mouse_y > el.y && $window.mouse_y < el.y + 50
+          @dragged_object = el
+        end
       end
-      @hero.y -= SPEED
-      @hero.w_y = @hero.y - (@camera.y - WINDOW_HEIGHT / 2)
     end
-    if $window.button_down?(Gosu::KbS) && can_move_to?(@hero, @hero.x, @hero.y + SPEED)
-      if @camera.y < (MAP_HEIGHT - WINDOW_HEIGHT / 2) && @hero.y > (WINDOW_HEIGHT / 2)
-        @camera.y += SPEED
+  end
+
+  def button_up(id)
+    if id == Gosu::MsLeft && !@dragged_object.nil?
+      if $window.mouse_x > @cauldron.x && $window.mouse_x < @cauldron.x + @cauldron.width && $window.mouse_y > @cauldron.y && $window.mouse_y < @cauldron.y + @cauldron.height
+        if @cauldron.ingredients.length == 0
+          @cauldron.image = Gosu::Image.new($window, CAULDRON_WITH_POTION_FILE, false)
+        end
+        @cauldron.ingredients.push(@dragged_object.ingredient)
+        @features_to_implement.delete_if { |el| el === @dragged_object.ingredient }
+        @implemented_features.concat @dragged_object.ingredient.features
+        @collected_ingredients.delete_if { |el| el === @dragged_object }
+        @dragged_object = nil
+        # if @features_to_implement.length == 0
+        #   GameState.switch(TestingState.new(@order, @implemented_features))
+        # end
+      else
+        @dragged_object.x = @dragged_object.home_x
+        @dragged_object.y = @dragged_object.home_y
       end
-      @hero.y += SPEED
-      @hero.w_y = @hero.y - (@camera.y - WINDOW_HEIGHT / 2)
+      @dragged_object = nil
     end
-    @hero.update
   end
 
   def draw
@@ -66,6 +83,38 @@ class ImplementationState < WaterfallState
       @background.draw(0, 0, 0)
       @hero.draw
       @customers.each { |customer| customer.draw }
+      @collectable_ingredients.each { |ingredient| ingredient.draw }
+      @cauldron.draw
+    end
+    color = Gosu::Color.new(255, 147, 91, 5)
+    $window.draw_quad(
+      300, 920, color,
+      1620, 920, color,
+      1620, 1080, color,
+      300, 1080, color,
+      200)
+
+    color = Gosu::Color.new(100, 0, 0, 0)
+    $window.draw_quad(
+      0, 300, color,
+      100, 300, color,
+      100, 920, color,
+      0, 920, color,
+      200)
+
+    @collected_ingredients.each do |el|
+      el.draw
+    end
+
+    index = 0
+    @features_to_implement.each_with_index do |feature, idx|
+      index += idx
+      feature.draw_task(300 + 10*(index), 930)
+    end
+
+    @implemented_features.each_with_index do |feature, idx|
+      index += idx
+      feature.draw_completed(300 + 10*(index), 930)
     end
   end
 end

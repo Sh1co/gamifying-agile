@@ -17,6 +17,14 @@ class Customer
     x > @x && x < @x + @image.width && y > @y && y < @y + @image.height
   end
 
+  def width
+    @image.width
+  end
+
+  def height
+    @image.height
+  end
+
   def draw
     @image.draw(@x, @y, 1)
     if self.has_order?

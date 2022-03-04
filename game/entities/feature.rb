@@ -12,4 +12,10 @@ class FlyingFeature < Feature
     @big_image = Gosu::Image.new(
       $window, Utils.media_path('flying_icon_big.png'), false)
   end
+
+  def draw_completed(x, y)
+    Gosu::Image.new(
+      $window, Utils.media_path('green_icon.png'), false).draw(x, y, 201)
+    @big_image.draw(x, y, 201)
+  end
 end

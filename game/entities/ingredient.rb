@@ -7,7 +7,7 @@ class Ingredient
       @window, @name,
       Gosu.default_font_name, 100)
     cost = Gosu::Image.from_text(
-      @window, "Licence Cost: #{@cost}",
+      @window, "License Cost: #{@cost}",
       Gosu.default_font_name, 50)
     if page == 0
       title.draw(420, 200, 301)
@@ -35,6 +35,7 @@ class Ingredient
 end
 
 class FeatherIngredient < Ingredient
+  attr_accessor :image
   def initialize(window)
     @window = window
     @name = 'Feather'
@@ -52,5 +53,35 @@ class FeatherIngredient < Ingredient
     Gosu::Image.new(
       $window, Utils.media_path('pink_icon.png'), false).draw(x, y, 201)
     @big_image.draw(x + 50, y + 20, 201)
+  end
+end
+
+class CollectableIngredient
+  attr_accessor :x, :y, :ingredient
+
+  def initialize(ingredient, x, y)
+    @ingredient = ingredient
+    @x = x
+    @y = y
+  end
+
+  def draw
+    @ingredient.image.draw(@x, @y, 2)
+  end
+end
+
+class CollectedIngredient
+  attr_accessor :x, :y, :home_x, :home_y, :ingredient
+
+  def initialize(ingredient, x, y)
+    @ingredient = ingredient
+    @x = x
+    @home_x = x
+    @y = y
+    @home_y = y
+  end
+
+  def draw
+    @ingredient.image.draw(@x, @y, 201)
   end
 end
