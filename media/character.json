@@ -1,0 +1,19 @@
+{"frames": {
+  "character.png":
+  {
+    "frame": {"x":0,"y":0,"w":50,"h":90},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":50,"h":90},
+    "sourceSize": {"w":50,"h":90}
+  }},
+  "meta": {
+    "app": "http://www.texturepacker.com",
+    "version": "1.0",
+    "image": "character.png",
+    "format": "RGBA8888",
+    "size": {"w":50,"h":90},
+    "scale": "1",
+    "smartupdate": "$TexturePacker:SmartUpdate:0da088f23b1454869c6ff25aabebeda2$"
+  }
+}

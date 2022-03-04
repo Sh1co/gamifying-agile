@@ -1,0 +1,19 @@
+{"frames": {
+  "portal.png":
+  {
+    "frame": {"x":0,"y":0,"w":200,"h":150},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":200,"h":150},
+    "sourceSize": {"w":200,"h":150}
+  }},
+  "meta": {
+    "app": "http://www.texturepacker.com",
+    "version": "1.0",
+    "image": "portal.png",
+    "format": "RGBA8888",
+    "size": {"w":200,"h":150},
+    "scale": "1",
+    "smartupdate": "$TexturePacker:SmartUpdate:0da088f23b1454869c6ff25aabebeda2$"
+  }
+}
