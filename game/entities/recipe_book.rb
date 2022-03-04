@@ -18,7 +18,7 @@ class RecipeBook
       0, 1080, color,
       200)
     book = Gosu::Image.new(
-      @window, Game.media_path('recipe_book.png'), false)
+      @window, Utils.media_path('recipe_book.png'), false)
     book.draw(0, 0, 300)
 
     @ingredients[0].draw(0)

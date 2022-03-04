@@ -89,7 +89,7 @@ class DesignState < WaterfallState
     unless @recipe_book_open
       color = Gosu::Color.new(255, 147, 91, 5)
       icon = Gosu::Image.new(
-        $window, Game.media_path('yellow_icon.png'), false)
+        $window, Utils.media_path('yellow_icon.png'), false)
       $window.draw_quad(
         300, 920, color,
         1620, 920, color,
@@ -111,7 +111,7 @@ class DesignState < WaterfallState
         0, 80, color,
         200)
       book_icon = Gosu::Image.new(
-        $window, Game.media_path('book_icon.png'), false)
+        $window, Utils.media_path('book_icon.png'), false)
       book_icon.draw(10, 10, 201)
     end
     if @recipe_book_open

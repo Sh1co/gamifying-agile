@@ -43,14 +43,14 @@ class FeatherIngredient < Ingredient
       FlyingFeature.new
     ]
     @image = Gosu::Image.new(
-      @window, Game.media_path('feather.png'), false)
+      @window, Utils.media_path('feather.png'), false)
     @big_image = Gosu::Image.new(
-      @window, Game.media_path('feather_big.png'), false)
+      @window, Utils.media_path('feather_big.png'), false)
   end
 
   def draw_task(x, y)
     Gosu::Image.new(
-      $window, Game.media_path('pink_icon.png'), false).draw(x, y, 201)
+      $window, Utils.media_path('pink_icon.png'), false).draw(x, y, 201)
     @big_image.draw(x + 50, y + 20, 201)
   end
 end

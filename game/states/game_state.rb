@@ -7,14 +7,14 @@ require_relative '../entities/camera'
 require_relative '../entities/customer'
 require_relative '../entities/order_request'
 require_relative '../entities/feature'
-require_relative '../game'
+require_relative '../utils'
 
 
 class GameState
   SPEED = 7
-  BACKGROUND = Game.media_path('map.png')
-  HERO_FILE = Game.media_path('character.json')
-  CUSTOMER_FILE = Game.media_path('customer.json')
+  BACKGROUND = Utils.media_path('map.png')
+  HERO_FILE = Utils.media_path('character.json')
+  CUSTOMER_FILE = Utils.media_path('customer.json')
 
   def initialize
     @background = Gosu::Image.new(

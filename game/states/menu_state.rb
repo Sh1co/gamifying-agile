@@ -21,7 +21,7 @@ class MenuState < GameState
   def update
     continue_text = @play_state ? "C = Continue, " : ""
     @info = Gosu::Image.from_text(
-      $window, "Q = Quit, #{continue_text}W = Waterfall Game",
+      $window, "Q = Quit, #{continue_text}W = Waterfall Utils",
       Gosu.default_font_name, 30)
   end
 

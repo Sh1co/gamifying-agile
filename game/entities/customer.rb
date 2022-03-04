@@ -6,7 +6,7 @@ class Customer
   def initialize(window, x, y, image, order)
     @window, @x, @y, @image, @order = window, x, y, image, order
     @bulb= Gosu::Image.new(
-      $window, Game.media_path('bulb.png'), false)
+      $window, Utils.media_path('bulb.png'), false)
   end
 
   def has_order?

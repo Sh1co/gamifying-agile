@@ -8,8 +8,8 @@ class FlyingFeature < Feature
   def initialize
     @name = 'Flying'
     @image = Gosu::Image.new(
-      $window, Game.media_path('flying_icon.png'), false)
+      $window, Utils.media_path('flying_icon.png'), false)
     @big_image = Gosu::Image.new(
-      $window, Game.media_path('flying_icon_big.png'), false)
+      $window, Utils.media_path('flying_icon_big.png'), false)
   end
 end

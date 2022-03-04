@@ -18,7 +18,7 @@ class OrderRequest
       0, 1080, color,
       200)
     parchment = Gosu::Image.new(
-      @window, Game.media_path('parchment.png'), false)
+      @window, Utils.media_path('parchment.png'), false)
     parchment.draw(0, 0, 300)
     title = Gosu::Image.from_text(
       $window, "Order",
