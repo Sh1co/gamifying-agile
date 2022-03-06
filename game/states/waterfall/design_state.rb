@@ -15,6 +15,7 @@ class DesignState < WaterfallState
     @designed_features = []
     @recipe_book_open = false
     @book = RecipeBook.new $window
+    @next_state = ImplementationState
   end
 
   def button_down(id)
@@ -36,7 +37,7 @@ class DesignState < WaterfallState
         elsif $window.mouse_x > 1300 || $window.mouse_x < 600 && $window.mouse_y > 900 && $window.mouse_y < 100
           @recipe_book_open = false
           if @features_to_design.length == 0
-            GameState.switch(ImplementationState.new @order, @designed_features)
+            GameState.switch(@next_state.new @order, @designed_features)
           end
         end
       end

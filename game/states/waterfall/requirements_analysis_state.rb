@@ -22,13 +22,14 @@ class RequirementsAnalysisState < WaterfallState
       Customer.new($window, 1200, 900, @customer_image.frame('customer.png'), nil)
     ]
     @open_order = nil
+    @next_state = DesignState
   end
 
   def button_down(id)
     if id == Gosu::MsLeft
       if !@open_order.nil?
         if $window.mouse_x > WINDOW_WIDTH/2 + 10 && $window.mouse_x < WINDOW_WIDTH/2 + 110 && $window.mouse_y > 790 && $window.mouse_y < 840
-          GameState.switch(DesignState.new @open_order, @open_order.features)
+          GameState.switch(@next_state.new @open_order, @open_order.features)
         elsif $window.mouse_x > WINDOW_WIDTH/2 - 110 && $window.mouse_x < WINDOW_WIDTH/2 - 10 && $window.mouse_y > 790 && $window.mouse_y < 840
           @open_order = nil
         end

@@ -25,8 +25,8 @@ class ImplementationState < WaterfallState
     @implemented_features = []
     @collected_ingredients = []
     @cooked_ingredients = []
-
     @dragged_object = nil
+    @next_state = TestingState
   end
 
   def update
@@ -66,7 +66,7 @@ class ImplementationState < WaterfallState
         @collected_ingredients.delete_if { |el| el === @dragged_object }
         @dragged_object = nil
         # if @features_to_implement.length == 0
-        #   GameState.switch(TestingState.new(@order, @implemented_features))
+        #   GameState.switch(@next_state.new(@order, @implemented_features))
         # end
       else
         @dragged_object.x = @dragged_object.home_x
