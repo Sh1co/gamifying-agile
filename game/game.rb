@@ -1,4 +1,4 @@
-class GameWindow < Gosu::Window
+class Game < Gosu::Window
   attr_accessor :state
 
   def initialize
