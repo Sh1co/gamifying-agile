@@ -17,6 +17,7 @@ class GameState
   HERO_FILE = Utils.media_path('character.json')
   CUSTOMER_FILE = Utils.media_path('customer.json')
   EMPTY_CAULDRON_FILE = Utils.media_path('pot.png')
+  attr_accessor :next_state
 
   def initialize
     @background = Gosu::Image.new(
