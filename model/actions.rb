@@ -1,55 +1,29 @@
-require_relative 'anomalies.rb'
+require_relative 'anomaly/anomaly'
 
 class Action
   # @abstract
+  attr_reader :strength
 
-  def action_applicable?(anomaly)
+  def can_apply(anomaly)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
-end
 
-class PreventiveAction < Action
-  # @abstract
-end
-class CorrectiveAction < Action
-  # @abstract
-end
-class AdaptiveAction < Action
-  # @abstract
-end
-
-class Test < Action
-  def to_s
-    "'Test'"
-  end
-  def action_applicable?(anomaly)
-    anomaly.is_a?(UntestedFeature)
+  def apply(anomaly, state)
+    if self.can_apply?(anomaly)
+      anomaly.difficulty -= @strength
+    else
+      anomaly.difficulty += @strength
+    end
+    state.update
   end
 end
 
-class Code < Action
-  def to_s
-    "'Code'"
+class ThinkReallyHard < Action
+  def initialize
+    @strength = 2
   end
-  def action_applicable?(anomaly)
-    anomaly.is_a?(UnimplementedFeature)
-  end
-end
 
-class DesignSystem < PreventiveAction
-  def to_s
-    "'DesignSystem'"
-  end
-  def action_applicable?(anomaly)
-    anomaly.is_a?(LackOfDesign)
-  end
-end
-
-class CollectRequirements < PreventiveAction
-  def to_s
-    "'CollectRequirements'"
-  end
-  def action_applicable?(anomaly)
-    anomaly.is_a?(NewRequirement)
+  def can_apply?(anomaly)
+    anomaly.is_a?(Bug)
   end
 end

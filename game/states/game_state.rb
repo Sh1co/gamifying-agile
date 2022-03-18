@@ -4,12 +4,11 @@ require_relative '../constants'
 require_relative '../entities/camera'
 require_relative '../entities/customer'
 require_relative '../entities/order_request'
-require_relative '../entities/feature'
+require_relative '../entities/task'
 require_relative '../entities/hero'
 require_relative '../entities/portal'
 require_relative '../entities/cauldron'
 require_relative '../utils'
-
 
 class GameState
   SPEED = 7

@@ -1,4 +1,4 @@
-require_relative 'feature'
+require_relative 'task'
 
 class Ingredient
   attr_reader :window, :name, :image, :big_image, :cost, :features
