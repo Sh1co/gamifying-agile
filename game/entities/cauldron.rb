@@ -1,4 +1,6 @@
-class Cauldron
+require_relative 'util_classes/solid_object'
+
+class Cauldron < SolidObject
   attr_accessor :x, :y, :image, :ingredients
 
   def initialize(x, y, image)
@@ -8,15 +10,7 @@ class Cauldron
     @ingredients = []
   end
 
-  def width
-    @image.width
-  end
-
-  def height
-    @image.height
-  end
-
   def draw
-    image.draw(@x, @y, 3)
+    @image.draw_rot(@x, @y, 3, 0)
   end
 end

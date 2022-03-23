@@ -1,5 +1,7 @@
-class Hero
-  attr_accessor :x, :y, :w_x, :w_y, :body_angle, :width, :height
+require_relative 'util_classes/solid_object'
+
+class Hero < SolidObject
+  attr_accessor :x, :y, :w_x, :w_y, :body_angle
 
   def initialize(window, body)
     @x = WINDOW_WIDTH / 2
@@ -7,10 +9,8 @@ class Hero
     @w_x = WINDOW_WIDTH / 2
     @w_y = WINDOW_HEIGHT / 2
     @window = window
-    @body = body
+    @image = body
     @body_angle = 0.0
-    @width = body.width
-    @height = body.height
   end
 
   def update
@@ -20,7 +20,11 @@ class Hero
   end
 
   def draw
-    @body.draw(@x, @y, 1)
+    @image.draw_rot(@x, @y, 1, 0)
+  end
+
+  def draw_rot
+    @image.draw_rot(@x, @y, 1, @body_angle)
   end
 
   private

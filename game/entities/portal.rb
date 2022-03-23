@@ -1,11 +1,14 @@
-class Portal
-  attr_accessor :x, :y
+require_relative '../locations/location'
 
-  def initialize(window, image, x, y)
+class Portal
+  attr_reader :x, :y, :to_idx
+
+  def initialize(window, image, x, y, to_idx)
     @window = window
     @image = image
     @x = x
     @y = y
+    @to_idx = to_idx
   end
 
   def draw

@@ -13,30 +13,39 @@ require_relative './design_state'
 require_relative 'waterfall_state'
 
 class RequirementsAnalysisState < WaterfallState
+  CUSTOMER_FILE = Utils.media_path('customer.json')
+  PORTAL_FILE = Utils.media_path('portal.png')
+  EMPTY_CAULDRON_FILE = Utils.media_path('pot.png')
 
   def initialize
     super()
-    @customers = [
-      Customer.new($window, 1200, 500, @customer_image.frame('customer.png'), OrderRequest.new($window, [FlyingFeature.new], 100)),
-      Customer.new($window, 1200, 700, @customer_image.frame('customer.png'), nil),
-      Customer.new($window, 1200, 900, @customer_image.frame('customer.png'), nil)
+    customer_image = Gosu::TexturePacker.load_json(CUSTOMER_FILE, :precise)
+    customers = [
+      Customer.new($window, 1200, 500, customer_image.frame('customer.png'), OrderRequest.new($window, [FlyingFeature.new], 100)),
+      Customer.new($window, 1200, 700, customer_image.frame('customer.png'), nil),
+      Customer.new($window, 1200, 900, customer_image.frame('customer.png'), nil)
     ]
+    portals = [
+      Portal.new($window, Gosu::Image.new($window, PORTAL_FILE, false), 1500, 300, nil)
+    ]
+    cauldron = Cauldron.new(500, 500, Gosu::Image.new($window, EMPTY_CAULDRON_FILE, false))
+    @location = VillageLocation.new customers, cauldron, portals
     @open_order = nil
-    @next_state = DesignState
+    @next_states = DesignState
   end
 
   def button_down(id)
     if id == Gosu::MsLeft
       if !@open_order.nil?
         if $window.mouse_x > WINDOW_WIDTH/2 + 10 && $window.mouse_x < WINDOW_WIDTH/2 + 110 && $window.mouse_y > 790 && $window.mouse_y < 840
-          GameState.switch(@next_state.new @open_order, @open_order.features)
+          GameState.switch_state(@next_states.new @open_order, @open_order.features)
         elsif $window.mouse_x > WINDOW_WIDTH/2 - 110 && $window.mouse_x < WINDOW_WIDTH/2 - 10 && $window.mouse_y > 790 && $window.mouse_y < 840
           @open_order = nil
         end
       else
-        have_order = @customers.select { |customer| customer.has_order? }
+        have_order = @location.customers.select { |customer| customer.has_order? }
         have_order.each do |customer|
-          @open_order = customer.order if customer.was_clicked?($window.mouse_x, $window.mouse_y)
+          @open_order = customer.order if customer.is_hovered?($window.mouse_x, $window.mouse_y, @camera)
         end
       end
     end
@@ -44,19 +53,12 @@ class RequirementsAnalysisState < WaterfallState
 
   def update
     if @open_order.nil?
-      update_hero_position
+      @location.update_hero_position($window, @camera)
     end
   end
 
   def draw
-    off_x = -@camera.x + $window.width / 2
-    off_y = -@camera.y + $window.height / 2
-    $window.translate(off_x, off_y) do
-      @background.draw(0, 0, 0)
-      @hero.draw
-      @customers.each { |customer| customer.draw }
-      @cauldron.draw
-    end
+    @location.draw($window, @camera)
     unless @open_order.nil?
       @open_order.draw
     end

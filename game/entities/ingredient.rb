@@ -1,4 +1,5 @@
 require_relative 'task'
+require_relative 'util_classes/hud_element'
 
 class Ingredient
   attr_reader :window, :name, :image, :big_image, :cost, :features
@@ -70,7 +71,7 @@ class CollectableIngredient
   end
 end
 
-class CollectedIngredient
+class CollectedIngredient < HUDElement
   attr_accessor :x, :y, :home_x, :home_y, :ingredient
 
   def initialize(ingredient, x, y)
@@ -79,9 +80,10 @@ class CollectedIngredient
     @home_x = x
     @y = y
     @home_y = y
+    @image = @ingredient.image
   end
 
   def draw
-    @ingredient.image.draw(@x, @y, 201)
+    @image.draw(@x, @y, 201)
   end
 end

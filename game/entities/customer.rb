@@ -1,6 +1,7 @@
 require 'gosu'
+require_relative 'util_classes/solid_object'
 
-class Customer
+class Customer < SolidObject
   attr_accessor :window, :x, :y, :image, :order
 
   def initialize(window, x, y, image, order)
@@ -13,22 +14,10 @@ class Customer
     !@order.nil?
   end
 
-  def was_clicked?(x, y)
-    x > @x && x < @x + @image.width && y > @y && y < @y + @image.height
-  end
-
-  def width
-    @image.width
-  end
-
-  def height
-    @image.height
-  end
-
   def draw
-    @image.draw(@x, @y, 1)
+    @image.draw_rot(@x, @y, 1, 0)
     if self.has_order?
-      @bulb.draw(@x, @y, 2)
+      @bulb.draw_rot(@x - 10, @y - 10, 2, 0)
     end
   end
 end

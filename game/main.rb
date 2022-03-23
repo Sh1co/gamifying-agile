@@ -6,5 +6,5 @@ require_relative 'states/menu_state'
 require_relative 'game'
 
 $window = Game.new
-GameState.switch(MenuState.instance)
+GameState.switch_state(MenuState.instance)
 $window.show

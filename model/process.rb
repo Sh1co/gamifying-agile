@@ -4,9 +4,10 @@ require_relative 'task/task.rb'
 
 class DevelopmentProcessState
   # @abstract
-  attr_accessor :next_state,
+  attr_accessor :next_states,
                 :anomalies,
-                :actions
+                :actions,
+                :current_tasks
   attr_reader :task_context, :anomalies_context
 
   def initialize
@@ -14,7 +15,7 @@ class DevelopmentProcessState
   def advance_task(feature)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
-  def can_transition_state?
+  def can_transition_state?(state)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
   def update
@@ -30,7 +31,7 @@ class DevelopmentProcess
     @state = state
   end
 
-  def advance_state
+  def advance_state(state)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 end

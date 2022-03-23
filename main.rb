@@ -7,27 +7,27 @@ waterfall_state = WaterfallRequirementsAnalysis.new [RequirementsAnalysisTask.ne
                                                     AnomaliesContext.new(SimpleAnomaliesGenerationStrategy.new)
 process = WaterfallDevelopmentProcess.new waterfall_state
 
-process.advance_state
-process.state.advance_task process.state.features_from.at(0)
-process.state.advance_task process.state.features_from.at(0)
-process.advance_state
+process.advance_state process.state.next_states[0]
+process.state.advance_task process.state.current_tasks.at(0)
+process.state.advance_task process.state.current_tasks.at(0)
+process.advance_state process.state.next_states[0]
 
-process.state.advance_task process.state.features_from.at(0)
-process.state.advance_task process.state.features_from.at(0)
-process.advance_state
+process.state.advance_task process.state.current_tasks.at(0)
+process.state.advance_task process.state.current_tasks.at(0)
+process.advance_state process.state.next_states[0]
 
-process.state.advance_task process.state.features_from.at(0)
+process.state.advance_task process.state.current_tasks.at(0)
 puts process.state.anomalies
 process.state.actions[0].apply(process.state.anomalies[0], process.state)
 process.state.actions[0].apply(process.state.anomalies[0], process.state)
-process.state.advance_task process.state.features_from.at(0)
-process.state.advance_task process.state.features_from.at(0)
-process.advance_state
+process.state.advance_task process.state.current_tasks.at(0)
+process.state.advance_task process.state.current_tasks.at(0)
+process.advance_state process.state.next_states[0]
 
-process.state.advance_task process.state.features_from.at(0)
-process.state.advance_task process.state.features_from.at(0)
-process.advance_state
+process.state.advance_task process.state.current_tasks.at(0)
+process.state.advance_task process.state.current_tasks.at(0)
+process.advance_state process.state.next_states[0]
 
-process.state.advance_task process.state.features_from.at(0)
-process.state.advance_task process.state.features_from.at(0)
-process.advance_state
+process.state.advance_task process.state.current_tasks.at(0)
+process.state.advance_task process.state.current_tasks.at(0)
+process.advance_state process.state.next_states[0]

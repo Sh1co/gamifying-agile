@@ -3,19 +3,29 @@ require_relative 'implementation_state'
 require_relative '../../entities/recipe_book'
 
 class DesignState < WaterfallState
+  CUSTOMER_FILE = Utils.media_path('customer.json')
+  PORTAL_FILE = Utils.media_path('portal.png')
+  EMPTY_CAULDRON_FILE = Utils.media_path('pot.png')
+
   def initialize(order, tasks)
     super()
-    @customers = [
-      Customer.new($window, 1200, 500, @customer_image.frame('customer.png'), nil),
-      Customer.new($window, 1200, 700, @customer_image.frame('customer.png'), nil),
-      Customer.new($window, 1200, 900, @customer_image.frame('customer.png'), nil)
+    customer_image = Gosu::TexturePacker.load_json(CUSTOMER_FILE, :precise)
+    customers = [
+      Customer.new($window, 1200, 500, customer_image.frame('customer.png'), nil),
+      Customer.new($window, 1200, 700, customer_image.frame('customer.png'), nil),
+      Customer.new($window, 1200, 900, customer_image.frame('customer.png'), nil)
     ]
+    portals = [
+      Portal.new($window, Gosu::Image.new($window, PORTAL_FILE, false), 1500, 300, nil)
+    ]
+    cauldron = Cauldron.new(500, 500, Gosu::Image.new($window, EMPTY_CAULDRON_FILE, false))
+    @location = VillageLocation.new customers, cauldron, portals
     @features_to_design = tasks
     @budget = order.budget
     @designed_features = []
     @recipe_book_open = false
     @book = RecipeBook.new $window
-    @next_state = ImplementationState
+    @next_states = ImplementationState
   end
 
   def button_down(id)
@@ -37,7 +47,7 @@ class DesignState < WaterfallState
         elsif $window.mouse_x > 1300 || $window.mouse_x < 600 && $window.mouse_y > 900 && $window.mouse_y < 100
           @recipe_book_open = false
           if @features_to_design.length == 0
-            GameState.switch(@next_state.new @order, @designed_features)
+            GameState.switch_state(@next_states.new @order, @designed_features)
           end
         end
       end
@@ -46,19 +56,12 @@ class DesignState < WaterfallState
 
   def update
     unless @recipe_book_open
-      update_hero_position
+      @location.update_hero_position($window, @camera)
     end
   end
 
   def draw
-    off_x = -@camera.x + $window.width / 2
-    off_y = -@camera.y + $window.height / 2
-    $window.translate(off_x, off_y) do
-      @background.draw(0, 0, 0)
-      @hero.draw
-      @customers.each { |customer| customer.draw }
-      @cauldron.draw
-    end
+    @location.draw($window, @camera)
     unless @recipe_book_open
       color = Gosu::Color.new(255, 147, 91, 5)
       icon = Gosu::Image.new(
