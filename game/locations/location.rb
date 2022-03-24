@@ -114,7 +114,7 @@ class SwampLocation < Location
     @hero = Hero.new($window, hero_image)
     @portals = portals
     @collectable_ingredients = collectable_ingredients
-    @anomalies = [Anomaly.new($window, 1000, 1000, anomaly_image, 4)]
+    @anomalies = [Anomaly.new($window, 1500, 500, anomaly_image, 4)]
     @active_actions = []
     @mode = :battle
   end
