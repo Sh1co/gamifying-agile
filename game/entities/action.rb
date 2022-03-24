@@ -1,5 +1,6 @@
 require_relative 'util_classes/hud_element'
 require_relative '../constants'
+require_relative '../animations/static_animation'
 
 class Action < HUDElement
   attr_reader :strength, :image
@@ -26,7 +27,7 @@ class Action < HUDElement
 end
 
 class ActiveAction < Interactive
-  attr_reader :x, :y, :action
+  attr_reader :x, :y, :action, :animation_tiles
   def initialize(window, camera, action, x, y)
     @action = action
     @image = action.image
@@ -37,7 +38,9 @@ class ActiveAction < Interactive
     @speed = action.strength
     @x = x
     @y = y
+    @animation_tiles = StaticAnimation.load_animation('explosion.png', window)
   end
+
 
   def draw
     @action.image.draw(@x, @y, 200)

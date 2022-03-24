@@ -1,16 +1,12 @@
 require 'gosu'
-
-def media_path(file)
-  File.join(File.dirname(File.dirname(
-    __FILE__)), 'media', file)
-end
+require_relative '../utils'
 
 class StaticAnimation
   FRAME_DELAY = 10 # ms
 
   def self.load_animation(tile, window)
     Gosu::Image.load_tiles(
-      window, media_path(tile), 192, 192, false)
+      window, Utils.media_path(tile), 128, 128, false)
   end
 
   def initialize(animation, x, y)
@@ -23,13 +19,17 @@ class StaticAnimation
     @current_frame += 1 if frame_expired?
   end
 
-  def draw
+  def draw(window, camera)
     return if done?
     image = current_frame
-    image.draw(
-      @x - image.width / 2.0,
-      @y - image.height / 2.0,
-      0)
+    off_x = -camera.x + window.width / 2
+    off_y = -camera.y + window.height / 2
+    window.translate(off_x, off_y) do
+      image.draw(
+        @x - image.width / 2.0,
+        @y - image.height / 2.0,
+        500)
+    end
   end
 
   def done?
@@ -56,7 +56,7 @@ class DynamicAnimation
 
   def self.load_animation(tile, window)
     Gosu::Image.load_tiles(
-      window, media_path(tile), 192, 192, false)
+      window, media_path(tile), 128, 128, false)
   end
 
   def initialize(animation, x1, y1, x2, y2)

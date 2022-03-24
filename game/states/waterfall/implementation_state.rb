@@ -42,6 +42,7 @@ class ImplementationState < WaterfallState
     @selected_action = nil
     @dragged_object = nil
     @next_states = TestingState
+    @active_animations = []
   end
 
   def update
@@ -51,6 +52,10 @@ class ImplementationState < WaterfallState
       @location.active_actions.each  do |action|
         action.update
       end
+    end
+
+    @active_animations.each  do |action|
+      action.update
     end
 
     unless @location.anomalies.length > 0
@@ -76,8 +81,10 @@ class ImplementationState < WaterfallState
         end
         @location.active_actions.each  do |action|
           unless SolidObject.will_not_collide? action, anomaly, action.x, action.y
+            @active_animations.push(StaticAnimation. new action.animation_tiles, anomaly.x, anomaly.y)
             anomaly.difficulty -= action.action.strength
             @location.active_actions.delete_if { |el| el === action }
+
           end
         end
       end
@@ -184,6 +191,10 @@ class ImplementationState < WaterfallState
     @implemented_features.each_with_index do |feature, idx|
       index += idx
       feature.draw_completed(300 + 10*(index), 930)
+    end
+
+    @active_animations.each  do |action|
+      action.draw($window, @camera)
     end
   end
 end
