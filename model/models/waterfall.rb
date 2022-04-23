@@ -5,9 +5,8 @@ class WaterfallState < DevelopmentProcessState
   attr_accessor :anomalies,
                 :actions
 
-  def initialize(features, task_context, anomalies_context)
+  def initialize(features, anomalies_context)
     @current_tasks = features
-    @task_context = task_context
     @anomalies_context = anomalies_context
   end
 
@@ -20,20 +19,20 @@ class WaterfallState < DevelopmentProcessState
   end
 end
 
-class WaterfallDevelopmentProcess < DevelopmentProcess
-  def initialize(state)
-    super
-  end
-
-  def advance_state(state)
-    if self.state.can_transition_state? state
-      puts "Transitioning from #{self.state.to_s} to #{state.to_s}"
-      self.state = state.new self.state.current_tasks, self.state.task_context, self.state.anomalies_context
-    else
-      puts "Too early to go to the next stage!"
-    end
-  end
-end
+# class WaterfallDevelopmentProcess < DevelopmentProcess
+#   def initialize(state)
+#     super
+#   end
+#
+#   def switch_state(state)
+#     if self.state.can_transition_state? state
+#       puts "Transitioning from #{self.state.to_s} to #{state.to_s}"
+#       self.state = state.new self.state.current_tasks, self.state.task_context, self.state.anomalies_context
+#     else
+#       puts "Too early to go to the next stage!"
+#     end
+#   end
+# end
 
 class WaterfallRequirementsAnalysis < WaterfallState
   def initialize(features, task_context, anomalies_context)

@@ -1,0 +1,2 @@
+class ProductEntity
+end

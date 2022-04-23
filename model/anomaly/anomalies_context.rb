@@ -11,14 +11,13 @@ class AnomaliesContext
 end
 
 class AnomaliesGenerationStrategy
-  # @abstract
-  def generate_anomalies(state)
+  def generate_anomalies(tasks, anomalies)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 end
 
 class SimpleAnomaliesGenerationStrategy < AnomaliesGenerationStrategy
-  def generate_anomalies(state)
+  def generate_anomalies(tasks, anomalies)
     # if state.anomalies.length >= 3
     #   []
     # else
