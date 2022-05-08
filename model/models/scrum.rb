@@ -85,6 +85,9 @@ class ScrumDaily < ScrumState
     end
 
     def progress_tasks()
+        for task in @sprint_tasks
+            task.update()
+        end
         # TODO: For each task in [sprint_tasks] that has an assigned developer progress it by the
         # development power of its developer, if new tasks arise from finishing a task then 
         # add them to the backlog
