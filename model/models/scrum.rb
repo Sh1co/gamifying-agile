@@ -21,9 +21,10 @@ class ScrumState < DevelopmentProcessState
     attr_accessor :anomalies,
                   :actions
   
-    def initialize(backlog, anomalies_context)
+    def initialize(backlog, anomalies_context, sprint_length)
       @backlog = backlog
       @anomalies_context = anomalies_context
+      @sprint_length = sprint_length
     end
   
     def advance_task(feature)
@@ -39,7 +40,6 @@ class ScrumSprintPlanning < ScrumState
 
     def initialize(backlog, anomalies_context, sprint_length, developers)
         super
-        @sprint_length = sprint_length
         @tasks_added = false
         @developers = @developers
         @sprint_tasks = Array[]
@@ -66,7 +66,6 @@ class ScrumDaily < ScrumState
 
     def initialize(backlog, anomalies_context, sprint_length, sprint_tasks)
         super
-        @sprint_length = sprint_length
         @current_sprint_days = 0
         @sprint_tasks = sprint_tasks
         @next_state = ScrumReview
@@ -98,7 +97,6 @@ class ScrumReview < ScrumState
 
     def initialize(backlog, anomalies_context, sprint_length, sprint_tasks)
         super
-        @sprint_length = sprint_length
         @tasks_sent_back = false
         @sprint_tasks = sprint_tasks
         @next_state = ScrumSprintPlanning
