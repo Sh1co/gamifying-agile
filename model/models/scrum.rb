@@ -21,10 +21,12 @@ end
 
 class ScrumSprintPlanning < ScrumState
 
-    def initialize(backlog, anomalies_context, sprint_length)
+    def initialize(backlog, anomalies_context, sprint_length, developers)
         super
         @sprint_length = sprint_length
         @tasks_added = false
+        @developers = @developers
+        @sprint_tasks = Array[]
     end
     
     def can_transition_state?(state)
@@ -36,6 +38,8 @@ class ScrumSprintPlanning < ScrumState
     end
 
     def choose_tasks_for_sprint()
+        # TODO: Choose top tasks from [backlog] that [developers] can do in [sprint_length] development days
+        # Add chosen tasks to [sprint_tasks]
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
@@ -64,8 +68,12 @@ class ScrumDaily < ScrumState
     end
 
     def progress_tasks()
+        # TODO: For each task in [sprint_tasks] that has an assigned developer progress it by the
+        # development power of its developer, if new tasks arise from finishing a task then 
+        # add them to the backlog
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
+
 end
 
 class ScrumReview < ScrumState
@@ -86,7 +94,10 @@ class ScrumReview < ScrumState
     end
 
     def send_sprint_tasks_to_backlog()
-        raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
+        for task in sprint_tasks
+            backlog.unshift!(task)
+        end
+        @tasks_sent_back = true
     end
 end 
 
