@@ -43,6 +43,7 @@ class ScrumSprintPlanning < ScrumState
         @tasks_added = false
         @developers = @developers
         @sprint_tasks = Array[]
+        @next_state = ScrumDaily
     end
     
     def can_transition_state?(state)
@@ -68,6 +69,7 @@ class ScrumDaily < ScrumState
         @sprint_length = sprint_length
         @current_sprint_days = 0
         @sprint_tasks = sprint_tasks
+        @next_state = ScrumReview
     end
 
     def can_transition_state?(state)
@@ -99,6 +101,7 @@ class ScrumReview < ScrumState
         @sprint_length = sprint_length
         @tasks_sent_back = false
         @sprint_tasks = sprint_tasks
+        @next_state = ScrumSprintPlanning
     end
 
     def can_transition_state?(state)
