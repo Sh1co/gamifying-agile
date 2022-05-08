@@ -1,6 +1,22 @@
 require_relative '../process.rb'
 require_relative '../anomaly/anomaly'
 
+
+class ScrumDevelopmentProcess < DevelopmentProcess
+  def initialize(state)
+    super
+  end
+
+  def switch_state(state)
+    if self.state.can_transition_state? state
+      puts "Transitioning from #{self.state.to_s} to #{state.to_s}"
+      self.state = state.new self.state.current_tasks, self.state.task_context, self.state.anomalies_context
+    else
+      puts "Too early to go to the next stage!"
+    end
+  end
+end
+
 class ScrumState < DevelopmentProcessState
     attr_accessor :anomalies,
                   :actions
