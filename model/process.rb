@@ -43,7 +43,7 @@ class DevelopmentProcess
   def assign_task(product_entity, developer)
     is_busy = @current_tasks.find {|task| task.assignee == developer}
     if is_busy.nil?
-      @current_tasks.push Task.new product_entity, developer
+      @current_tasks.push Spec.new product_entity, developer
     end
   end
 

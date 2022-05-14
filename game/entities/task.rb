@@ -1,10 +1,10 @@
 require 'gosu'
 
-class Task
+class Spec
   attr_reader :name, :image, :big_image
 end
 
-class FlyingFeature < Task
+class FlyingFeature < Spec
   def initialize
     @name = 'Flying'
     @image = Gosu::Image.new(
