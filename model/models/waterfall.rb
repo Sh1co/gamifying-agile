@@ -125,7 +125,7 @@ class WaterfallTesting < WaterfallState
   def advance_task(task)
     if @task_context.can_advance_task?(task, self)
       idx = self.current_tasks.index task
-      self.current_tasks.push Task.new task.name
+      self.current_tasks.push Spec.new task.name
       self.current_tasks.delete_at idx
       self.update
       puts "Advanced #{task.name} from Implemented Features to Tested Features"

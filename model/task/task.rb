@@ -1,6 +1,6 @@
 require_relative '../product_entity'
 
-class Task
+class Spec
   attr_reader :product_entity,
               :assignee,
               :progress,
