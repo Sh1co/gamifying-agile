@@ -55,8 +55,15 @@ class ScrumSprintPlanning < ScrumState
     end
 
     def choose_tasks_for_sprint()
-        # TODO: Choose top tasks from [backlog] that [developers] can do in [sprint_length] development days
-        # Add chosen tasks to [sprint_tasks]
+        # possible upgrade: choose tasks based on devs skills
+        for developer in @developers
+          break if @backlog.empty?
+          task = @backlog.first()
+          task.assignee = developer
+          developer.busy = true
+          @backlog.drop!(1)
+          @sprint_tasks.add(task)
+        end
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
@@ -120,4 +127,8 @@ class ScrumReview < ScrumState
         @tasks_sent_back = true
     end
 end 
+
+class ScrumDeveloper > TeamMember
+  attr_accessor: busy
+end
 
