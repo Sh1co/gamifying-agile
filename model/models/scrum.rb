@@ -1,5 +1,6 @@
 require_relative '../process.rb'
 require_relative '../anomaly/anomaly'
+require_relative '../task'
 
 
 class ScrumDevelopmentProcess < DevelopmentProcess
@@ -94,10 +95,11 @@ class ScrumDaily < ScrumState
     def progress_tasks()
         for task in @sprint_tasks
             task.update()
+            next if task.progress > 0
+            # TODO: add tasks generated from completetion to backlog
+            task.assignee.busy = false
+            @sprint_tasks.delete!(task)
         end
-        # TODO: For each task in [sprint_tasks] that has an assigned developer progress it by the
-        # development power of its developer, if new tasks arise from finishing a task then 
-        # add them to the backlog
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
@@ -121,8 +123,8 @@ class ScrumReview < ScrumState
     end
 
     def send_sprint_tasks_to_backlog()
-        for task in sprint_tasks
-            backlog.unshift!(task)
+        for task in @sprint_tasks
+            @backlog.unshift!(task)
         end
         @tasks_sent_back = true
     end
