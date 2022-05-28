@@ -1,13 +1,18 @@
-require_relative './model/new_model/waterfall/waterfall'
-require_relative './model/new_model/actor'
-require_relative './model/new_model/skill'
+require_relative './model/estimation_model/project'
+require_relative './model/estimation_model/task'
+require_relative './model/estimation_model/sprint'
+require_relative './model/estimation_model/epic'
+require_relative './model/estimation_model/team'
 
+tasks = [Task.new("Fronted", 4), Task.new("Backend", 3)]
+sprint = Sprint.new tasks
+epic = Epic.new [sprint]
 
-testing = Skill.new "Testing", 8
-tester = Actor.new "Developer", [testing]
+dev1 = TeamMember.new "Ivan"
+dev2 = TeamMember.new "Sergay"
 
-development = Skill.new "Development", 9
-developer = Actor.new "Developer", [development]
+team = Team.new [dev1, dev2]
 
-waterfall_process = WaterfallProcess.new [tester, developer]
+project = Project.new team, [epic]
 
+project.simulate
