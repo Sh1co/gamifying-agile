@@ -26,20 +26,6 @@ class SprintExecution < Stage
     super
   end
 
-  # sort_by do |t1, t2|
-  #   if t1.is_a? TestingTask
-  #     1
-  #   elsif t2.is_a? TestingTask
-  #     -1
-  #   elsif t1.is_a? ImplementationTask
-  #     1
-  #   elsif t2.is_a? ImplementationTask
-  #     -1
-  #   else
-  #     0
-  #   end
-  # end.
-
 
   def tick(project, process)
     @ticks_passed += 1
@@ -47,7 +33,19 @@ class SprintExecution < Stage
     @actions_in_progress = @actions_in_progress.select {|a| !a.done}
     free_team_members = project.team.select {|tm| !tm.is_busy}
     if free_team_members.length > 0
-      process.backlog.select {|t| !t.is_worked_on}.each do |task|
+      process.backlog.select {|t| !t.is_worked_on}.sort_by do |t1, t2|
+        if t1.is_a? TestingTask
+          1
+        elsif t2.is_a? TestingTask
+          -1
+        elsif t1.is_a? ImplementationTask
+          1
+        elsif t2.is_a? ImplementationTask
+          -1
+        else
+          0
+        end
+      end.each do |task|
         free_team_member = free_team_members.pop
         if free_team_member.nil?
           break
