@@ -1,18 +1,20 @@
+require 'gruff'
 require_relative './model/estimation_model/project'
-require_relative './model/estimation_model/task'
-require_relative './model/estimation_model/sprint'
-require_relative './model/estimation_model/epic'
 require_relative './model/estimation_model/team'
+require_relative './model/estimation_model/models/waterfall'
+require_relative './model/estimation_model/models/scrum'
+require_relative './model/estimation_model/development_process'
 
-tasks = [Task.new("Fronted", 4), Task.new("Backend", 3)]
-sprint = Sprint.new tasks
-epic = Epic.new [sprint]
+team = [TeamMember.new("SERGAY"), TeamMember.new("TIMUR"), TeamMember.new("SASHA")]
 
-dev1 = TeamMember.new "Ivan"
-dev2 = TeamMember.new "Sergay"
+project_waterfall = Project.new(team, RequirementCollection.new)
+project_scrum = Project.new(team, SprintPlanning.new)
 
-team = Team.new [dev1, dev2]
 
-project = Project.new team, [epic]
-
-project.simulate
+# stat_w = project_waterfall.simulate
+stat_s = project_scrum.simulate
+g = Gruff::Line.new
+g.title = 'Task completion'
+# g.data :Waterfall, stat_w
+g.data :Scrum, stat_s
+g.write('exciting.png')

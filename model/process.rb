@@ -21,7 +21,7 @@ class DevelopmentProcessState
   end
 end
 
-class DevelopmentProcess
+class Projectr
   attr_accessor :state
   attr_reader :step,
               :developers,

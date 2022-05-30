@@ -1,6 +1,6 @@
 require_relative 'anomaly/anomaly'
 
-class Action
+class Actionz
   # @abstract
   attr_reader :strength
 
@@ -18,7 +18,7 @@ class Action
   end
 end
 
-class ThinkReallyHard < Action
+class ThinkReallyHard < Actionz
   def initialize
     @strength = 2
   end

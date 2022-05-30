@@ -1,42 +1,47 @@
+require_relative './development_process'
+require_relative './feature'
+
 class Project
   attr_reader :team,
-              :current_epic,
-              :epics
+              :development_process,
+              :features,
+              :ticks_passed,
+              :statistics
 
-  def initialize(team, epics)
+  def initialize(team, stage)
+    @development_process = DevelopmentProcess.new stage
     @team = team
-    @epics = epics
-    @current_epic = @epics[0]
+    @features = Array.new(100) {|i| Feature.new 1, 1, 1}
+    @ticks_passed = 0
+    @statistics = []
   end
 
-  def get_progress
-    @current_epic.current_sprint.get_sprint_progress
-  end
-
-  def assign_tasks
-    free_tasks = @current_epic.current_sprint.get_not_assign_tasks
-    @team.members.each do |team_member|
-      unless free_tasks.length == 0
-        team_member.current_task = free_tasks.pop
-        team_member.current_task.assignee = team_member
-      end
-    end
+  def get_percentage_complete
+    completed = @features.select {|f| f.completed == f.difficulty}.length
+    completed.to_f/@features.length
   end
 
   def tick
-    self.assign_tasks
-    @current_epic.current_sprint.tick
+    @development_process.tick self
+    if rand < 0.1
+      delete_tasks = rand 0..1
+      delete_tasks.times do
+        @features.delete_at(rand(@features.length))
+      end
+      add_tasks = rand 0..2
+      @features = @features + Array.new(add_tasks) {|i| Feature.new rand(1..5), rand(1..5), rand(1..5)}
+    end
+    @ticks_passed += 1
   end
 
   def simulate
-    @epics.each_with_index do |epic, i|
-      print "Epic #{i} \n"
-      @current_epic.sprints.each_with_index do |sprint, j|
-        print "Epic #{i}. Sprint #{j}", "- - " * 15, "\n"
-        while @current_epic.current_sprint.get_sprint_progress < 1
-          self.tick
-        end
-      end
+    until @development_process.terminated
+      self.tick
+      # print("#{@ticks_passed} ticks passed \n")
+      # print "B #{@development_process.backlog.length} M #{@development_process.memoized_features.length} F #{@features.length} \n"
+      # print self.get_percentage_complete, "\n"
+      @statistics.push self.get_percentage_complete
     end
+    @statistics
   end
 end

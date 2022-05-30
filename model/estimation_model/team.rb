@@ -1,10 +1,10 @@
 class TeamMember
   attr_reader :name
-  attr_accessor :current_task
+  attr_accessor :is_busy
 
   def initialize(name)
     @name = name
-    @current_task = nil
+    @is_busy = false
   end
 end
 

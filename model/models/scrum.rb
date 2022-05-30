@@ -3,7 +3,7 @@ require_relative '../anomaly/anomaly'
 require_relative '../task'
 
 
-class ScrumDevelopmentProcess < DevelopmentProcess
+class ScrumDevelopmentProcess < Project
   def initialize(state)
     super
   end

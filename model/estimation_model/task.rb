@@ -1,21 +1,31 @@
 class Task
-  attr_reader :id,
-              :time_required,
-              :time_spent
-  attr_accessor :assignee
+  attr_reader :time_required,
+              :feature
+  attr_accessor :is_worked_on
 
-  def initialize(id, time_required)
-    @id = id
-    @time_required = time_required
-    @time_spent = 0
-    @assignee = nil
+  def initialize(feature)
+    @feature = feature
+    @is_worked_on = false
   end
+end
 
-  def increase_time_spent
-    @time_spent += 1
+class RequirementAnalysisTask < Task
+  def initialize(feature)
+    super
+    @time_required = feature.analysis_difficulty
   end
+end
 
-  def to_s
-    "Task #{self.class} #{@id} \n"
+class ImplementationTask < Task
+  def initialize(feature)
+    super
+    @time_required = feature.implementation_difficulty
+  end
+end
+
+class TestingTask < Task
+  def initialize(feature)
+    super
+    @time_required = feature.testing_difficulty
   end
 end
