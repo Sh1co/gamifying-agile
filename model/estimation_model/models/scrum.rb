@@ -3,8 +3,9 @@ require_relative '../action'
 require_relative '../task'
 
 class SprintPlanning < Stage
-  def initialize
-    super
+  def initialize(actions_in_progress)
+    super()
+    @actions_in_progress = actions_in_progress
   end
 
   def tick(project, process)
@@ -17,35 +18,37 @@ class SprintPlanning < Stage
   end
 
   def get_next_stage(project)
-    SprintExecution.new
+    SprintExecution.new @actions_in_progress
   end
 end
 
 class SprintExecution < Stage
-  def initialize
-    super
+  def initialize(actions_in_progress)
+    super()
+    @actions_in_progress = actions_in_progress
   end
-
 
   def tick(project, process)
     @ticks_passed += 1
     @actions_in_progress.each {|a| a.tick(process)}
     @actions_in_progress = @actions_in_progress.select {|a| !a.done}
     free_team_members = project.team.select {|tm| !tm.is_busy}
-    if free_team_members.length > 0
-      process.backlog.select {|t| !t.is_worked_on}.sort_by do |t1, t2|
+    print free_team_members.length, "\n"
+    if free_team_members.length > 0 && !self.ready_to_progress?(project, process)
+      sorted_tasks = process.backlog.select {|t| !t.is_worked_on}.sort! do |t1, t2|
         if t1.is_a? TestingTask
-          1
+          -1
         elsif t2.is_a? TestingTask
-          -1
-        elsif t1.is_a? ImplementationTask
           1
-        elsif t2.is_a? ImplementationTask
+        elsif t1.is_a? ImplementationTask
           -1
+        elsif t2.is_a? ImplementationTask
+          1
         else
           0
         end
-      end.each do |task|
+      end
+      sorted_tasks.each do |task|
         free_team_member = free_team_members.pop
         if free_team_member.nil?
           break
@@ -66,10 +69,10 @@ class SprintExecution < Stage
   end
 
   def get_next_stage(project)
-    if project.ticks_passed >= 10000
+    if project.ticks_passed >= 400
       nil
     else
-      SprintExecution.new
+      SprintPlanning.new @actions_in_progress
     end
   end
 end

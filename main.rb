@@ -5,11 +5,10 @@ require_relative './model/estimation_model/models/waterfall'
 require_relative './model/estimation_model/models/scrum'
 require_relative './model/estimation_model/development_process'
 
-team = [TeamMember.new("SERGAY"), TeamMember.new("TIMUR"), TeamMember.new("SASHA")]
+team = [TeamMember.new("SERGEY"), TeamMember.new("TIMUR"), TeamMember.new("ZOOM USER")]
 
-project_waterfall = Project.new(team, RequirementCollection.new)
-project_scrum = Project.new(team, SprintPlanning.new)
-
+project_waterfall = Project.new(team, RequirementCollection.new, Array.new(100) {|i| Feature.new rand(1..3), rand(1..3), rand(1..3)})
+project_scrum = Project.new(team, SprintPlanning.new([]), Array.new(100) {|i| Feature.new rand(1..3), rand(1..3), rand(1..3)})
 
 stat_w = project_waterfall.simulate
 stat_s = project_scrum.simulate

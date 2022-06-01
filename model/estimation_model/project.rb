@@ -9,10 +9,10 @@ class Project
               :ticks_passed,
               :statistics
 
-  def initialize(team, stage)
+  def initialize(team, stage, features)
     @development_process = DevelopmentProcess.new stage
     @team = team
-    @features = Array.new(100) {|i| Feature.new rand(1..3), rand(1..3), rand(1..3)}
+    @features = features
     @ticks_passed = 0
     @statistics = [[], []]
   end
@@ -48,21 +48,6 @@ class Project
       @statistics[0].push self.get_percentage_complete
       @statistics[1].push self.get_task_type_distribution
     end
-    if @development_process.stage.is_a?(SprintExecution) || @development_process.stage.is_a?(SprintPlanning)
-      prev_values = [100, 0, 0]
-      [
-        Array.new(300).map.with_index {|i, idx| [idx.to_f/300 + rand(0.01..0.06), 1].min},
-        prev_values + Array.new(220).map.with_index do |i, idx|
-          a = idx == 219 || prev_values[0] == 0 ? 0 : rand(0..1)
-          im = idx == 219 || prev_values[1] == 0 ? 0 : rand(0..1)
-          t = idx == 219 || prev_values[2] == 0 ? 0 : rand(0..1)
-          new_values = [[prev_values[0] - a, 0].max, [prev_values[1] + a - im, 0].max, [prev_values[1] + t - im, 0].max]
-          prev_values = new_values
-          new_values
-        end
-      ]
-    else
-      @statistics
-    end
+    @statistics
   end
 end

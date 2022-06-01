@@ -20,8 +20,6 @@ class DevelopmentProcess
   end
 
   def tick(project)
-    @stage.tick(project, self)
-    # print "#{project.features.length} #{@backlog.length} \n"
     if @stage.ready_to_progress?(project, self)
       next_stage = @stage.get_next_stage(project)
       # print "PROGRESSING TO STAGE #{next_stage.to_s} \n"
@@ -32,5 +30,6 @@ class DevelopmentProcess
         @stage = next_stage
       end
     end
+    @stage.tick(project, self)
   end
 end
