@@ -33,7 +33,6 @@ class SprintExecution < Stage
     @actions_in_progress.each {|a| a.tick(process)}
     @actions_in_progress = @actions_in_progress.select {|a| !a.done}
     free_team_members = project.team.select {|tm| !tm.is_busy}
-    print free_team_members.length, "\n"
     if free_team_members.length > 0 && !self.ready_to_progress?(project, process)
       sorted_tasks = process.backlog.select {|t| !t.is_worked_on}.sort! do |t1, t2|
         if t1.is_a? TestingTask
@@ -69,7 +68,7 @@ class SprintExecution < Stage
   end
 
   def get_next_stage(project)
-    if project.ticks_passed >= 400
+    if project.ticks_passed >= 600
       nil
     else
       SprintPlanning.new @actions_in_progress
