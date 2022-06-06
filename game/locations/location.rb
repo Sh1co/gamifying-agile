@@ -18,7 +18,7 @@ end
 
 class VillageLocation < Location
   SPEED = 7
-  BACKGROUND = Utils.media_path('map.png')
+  BACKGROUND = Utils.media_path('map_swamp.png')
   HERO_FILE = Utils.media_path('character.png')
 
   attr_reader :customers, :portals, :anomalies, :mode
@@ -99,7 +99,9 @@ class SwampLocation < Location
   SPEED = 7
   BACKGROUND = Utils.media_path('map_swamp.png')
   HERO_FILE = Utils.media_path('character_top_view.png')
-  ANOMALY_FILE = Utils.media_path('anomaly1.png')
+  ANOMALY_FILE1 = Utils.media_path('anomaly1.png')
+  ANOMALY_FILE2 = Utils.media_path('anomaly2.png')
+  ANOMALY_FILE3 = Utils.media_path('anomaly3.png')
 
   attr_reader :collectable_ingredients, :portals, :anomalies, :mode
   attr_accessor :active_actions
@@ -109,12 +111,20 @@ class SwampLocation < Location
       $window, BACKGROUND, false)
     hero_image = Gosu::Image.new(
       $window, HERO_FILE, false)
-    anomaly_image = Gosu::Image.new(
-      $window, ANOMALY_FILE, false)
+    anomaly_image1 = Gosu::Image.new(
+      $window, ANOMALY_FILE1, false)
+    anomaly_image2 = Gosu::Image.new(
+      $window, ANOMALY_FILE2, false)
+    anomaly_image3 = Gosu::Image.new(
+      $window, ANOMALY_FILE3, false)
     @hero = Hero.new($window, hero_image)
     @portals = portals
     @collectable_ingredients = collectable_ingredients
-    @anomalies = [Anomaly.new($window, 1500, 500, anomaly_image, 4)]
+    @anomalies = [
+      Anomaly.new($window, 1500, 500, anomaly_image1, 4),
+      Anomaly.new($window, 1300, 700, anomaly_image2, 6),
+      Anomaly.new($window, 1200, 300, anomaly_image3, 10),
+    ]
     @active_actions = []
     @mode = :battle
   end

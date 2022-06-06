@@ -11,26 +11,54 @@ class ImplementationState < WaterfallState
   CUSTOMER_FILE = Utils.media_path('customer.json')
   CAULDRON_WITH_WATER_FILE = Utils.media_path('pot_water.png')
   PORTAL_FILE = Utils.media_path('portal.png')
-  ACTION_FILE = Utils.media_path('action1.png')
+  ACTION_FILE1 = Utils.media_path('action1.png')
+  ACTION_FILE2 = Utils.media_path('action2.png')
+  ACTION_FILE3 = Utils.media_path('action3.png')
   CAULDRON_WITH_POTION_FILE = Utils.media_path('pot_potion.png')
 
   def initialize(order, tasks)
     super()
     @locations = Array[]
     customer_image = Gosu::TexturePacker.load_json(CUSTOMER_FILE, :precise)
-    action_image = Gosu::Image.new($window, ACTION_FILE, false)
-    customers = [
-      Customer.new($window, 1200, 500, customer_image.frame('customer.png'), nil),
-      Customer.new($window, 1200, 700, customer_image.frame('customer.png'), nil),
-      Customer.new($window, 1200, 900, customer_image.frame('customer.png'), nil)
+    action_image1 = Gosu::Image.new($window, ACTION_FILE1, false)
+    action_image2 = Gosu::Image.new($window, ACTION_FILE2, false)
+    action_image3 = Gosu::Image.new($window, ACTION_FILE3, false)
+    customers = [Customer.new($window, 1200, 500, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), nil),
+                 Customer.new($window, 1200, 700, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 1200, 900, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+                 Customer.new($window, 1000, 300, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+                 Customer.new($window, 700, 300, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 1400, 900, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+                 Customer.new($window, 1400, 700, Gosu::Image.new($window, Utils.media_path('customer5.png'), false), nil),
+                 Customer.new($window, 1400, 500, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+                 Customer.new($window, 700, 900, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
+                 Customer.new($window, 500, 900, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+                 Customer.new($window, 300, 900, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 300, 500, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+                 Customer.new($window, 500, 100, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), nil),
+                 Customer.new($window, 500, 300, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+                 Customer.new($window, 300, 100, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 300, 300, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
+                 Customer.new($window, 300, 700, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+                 Customer.new($window, 700, 100, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+                 Customer.new($window, 900, 100, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+                 Customer.new($window, 1100, 100, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), nil),
+                 Customer.new($window, 1300, 100, Gosu::Image.new($window, Utils.media_path('customer5.png'), false), nil),
+                 Customer.new($window, 1300, 300, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 1500, 200, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
     ]
     portals = [
-      Portal.new($window, Gosu::Image.new($window, PORTAL_FILE, false), 1500, 300, 1)
+      Portal.new($window, Gosu::Image.new($window, PORTAL_FILE, false), 2000, 300, 1)
     ]
     cauldron = Cauldron.new(500, 500, Gosu::Image.new($window, CAULDRON_WITH_WATER_FILE, false))
     @locations.push(VillageLocation.new customers, cauldron, portals)
     @locations.push(SwampLocation.new [Portal.new($window, Gosu::Image.new($window, PORTAL_FILE, false), 300, 300, 0)], [
-      CollectableIngredient.new(tasks[0], 2000, 500)
+      CollectableIngredient.new(tasks[0], 2000, 500),
+      CollectableIngredient.new(tasks[0], 1900, 1000),
+      CollectableIngredient.new(tasks[1], 1800, 1200),
+      CollectableIngredient.new(tasks[1], 1300, 1000),
+      CollectableIngredient.new(tasks[0], 1200, 800),
+      CollectableIngredient.new(tasks[1], 1400, 900),
     ])
     @location = @locations[0]
     @order = order
@@ -38,7 +66,7 @@ class ImplementationState < WaterfallState
     @implemented_features = []
     @collected_ingredients = []
     @cooked_ingredients = []
-    @actions = [Action.new($window, action_image, 2)]
+    @actions = [Action.new($window, action_image1, 2), Action.new($window, action_image2, 3), Action.new($window, action_image3, 6)]
     @selected_action = nil
     @dragged_object = nil
     @next_states = TestingState
@@ -76,7 +104,7 @@ class ImplementationState < WaterfallState
 
     if @location.anomalies.length > 0
       @location.anomalies.each do |anomaly|
-        if anomaly.difficulty == 0
+        if anomaly.difficulty <= 0
           @location.anomalies.delete_if { |el| el === anomaly }
         end
         @location.active_actions.each  do |action|
@@ -96,7 +124,7 @@ class ImplementationState < WaterfallState
           @location.hero.left_border < ingredient.x + 5 &&
           @location.hero.bottom_border > ingredient.y - 5 &&
           @location.hero.top_border < ingredient.y + 5
-          @collected_ingredients.push CollectedIngredient.new(ingredient.ingredient, 25, 310 + 10 * (@collected_ingredients.length - 1))
+          @collected_ingredients.push CollectedIngredient.new(ingredient.ingredient, 25, 310 + 40 * (@collected_ingredients.length))
           @location.collectable_ingredients.delete_if { |el| el === ingredient }
         end
       end
@@ -178,19 +206,19 @@ class ImplementationState < WaterfallState
     end
     @actions.each_with_index do |el, idx|
       el.x = WINDOW_WIDTH - 50
-      el.y = 350 + idx*20
+      el.y = 350 + idx*50
       el.draw
     end
 
     index = 0
     @features_to_implement.each_with_index do |feature, idx|
       index += idx
-      feature.draw_task(300 + 10*(index), 930)
+      feature.draw_task(300 + 170*(index), 930)
     end
 
     @implemented_features.each_with_index do |feature, idx|
       index += idx
-      feature.draw_completed(300 + 10*(index), 930)
+      feature.draw_completed(300 + 170*(index), 930)
     end
 
     @active_animations.each  do |action|

@@ -19,14 +19,33 @@ class RequirementsAnalysisState < WaterfallState
 
   def initialize
     super()
-    customer_image = Gosu::TexturePacker.load_json(CUSTOMER_FILE, :precise)
-    customers = [
-      Customer.new($window, 1200, 500, customer_image.frame('customer.png'), OrderRequest.new($window, [FlyingFeature.new], 100)),
-      Customer.new($window, 1200, 700, customer_image.frame('customer.png'), nil),
-      Customer.new($window, 1200, 900, customer_image.frame('customer.png'), nil)
+    customers = [            #x    y
+      Customer.new($window, 1200, 500, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), OrderRequest.new($window, [FlyingFeature.new, LoveFeature.new, DeathFeature.new], 150)),
+      Customer.new($window, 1200, 700, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+      Customer.new($window, 1200, 900, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+      Customer.new($window, 1000, 300, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+      Customer.new($window, 700, 300, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+      Customer.new($window, 1400, 900, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+      Customer.new($window, 1400, 700, Gosu::Image.new($window, Utils.media_path('customer5.png'), false), nil),
+      Customer.new($window, 1400, 500, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+      Customer.new($window, 700, 900, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
+      Customer.new($window, 500, 900, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+      Customer.new($window, 300, 900, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+      Customer.new($window, 300, 500, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+      Customer.new($window, 500, 100, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), nil),
+      Customer.new($window, 500, 300, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+      Customer.new($window, 300, 100, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+      Customer.new($window, 300, 300, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
+      Customer.new($window, 300, 700, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+      Customer.new($window, 700, 100, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+      Customer.new($window, 900, 100, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+      Customer.new($window, 1100, 100, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), nil),
+      Customer.new($window, 1300, 100, Gosu::Image.new($window, Utils.media_path('customer5.png'), false), nil),
+      Customer.new($window, 1300, 300, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+      Customer.new($window, 1500, 200, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
     ]
     portals = [
-      Portal.new($window, Gosu::Image.new($window, PORTAL_FILE, false), 1500, 300, nil)
+      Portal.new($window, Gosu::Image.new($window, PORTAL_FILE, false), 2000, 300, nil)
     ]
     cauldron = Cauldron.new(500, 500, Gosu::Image.new($window, EMPTY_CAULDRON_FILE, false))
     @location = VillageLocation.new customers, cauldron, portals

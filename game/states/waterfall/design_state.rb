@@ -10,10 +10,29 @@ class DesignState < WaterfallState
   def initialize(order, tasks)
     super()
     customer_image = Gosu::TexturePacker.load_json(CUSTOMER_FILE, :precise)
-    customers = [
-      Customer.new($window, 1200, 500, customer_image.frame('customer.png'), nil),
-      Customer.new($window, 1200, 700, customer_image.frame('customer.png'), nil),
-      Customer.new($window, 1200, 900, customer_image.frame('customer.png'), nil)
+    customers = [Customer.new($window, 1200, 500, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), nil),
+                 Customer.new($window, 1200, 700, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 1200, 900, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+                 Customer.new($window, 1000, 300, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+                 Customer.new($window, 700, 300, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 1400, 900, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+                 Customer.new($window, 1400, 700, Gosu::Image.new($window, Utils.media_path('customer5.png'), false), nil),
+                 Customer.new($window, 1400, 500, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+                 Customer.new($window, 700, 900, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
+                 Customer.new($window, 500, 900, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+                 Customer.new($window, 300, 900, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 300, 500, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+                 Customer.new($window, 500, 100, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), nil),
+                 Customer.new($window, 500, 300, Gosu::Image.new($window, Utils.media_path('customer3.png'), false), nil),
+                 Customer.new($window, 300, 100, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 300, 300, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
+                 Customer.new($window, 300, 700, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+                 Customer.new($window, 700, 100, Gosu::Image.new($window, Utils.media_path('customer6.png'), false), nil),
+                 Customer.new($window, 900, 100, Gosu::Image.new($window, Utils.media_path('customer4.png'), false), nil),
+                 Customer.new($window, 1100, 100, Gosu::Image.new($window, Utils.media_path('customer1.png'), false), nil),
+                 Customer.new($window, 1300, 100, Gosu::Image.new($window, Utils.media_path('customer5.png'), false), nil),
+                 Customer.new($window, 1300, 300, Gosu::Image.new($window, Utils.media_path('customer2.png'), false), nil),
+                 Customer.new($window, 1500, 200, Gosu::Image.new($window, Utils.media_path('customer7.png'), false), nil),
     ]
     portals = [
       Portal.new($window, Gosu::Image.new($window, PORTAL_FILE, false), 1500, 300, nil)
@@ -38,6 +57,14 @@ class DesignState < WaterfallState
       if @recipe_book_open
         if $window.mouse_x > WINDOW_WIDTH/2 - 220 && $window.mouse_x < WINDOW_WIDTH/2 - 70 && $window.mouse_y > 790 && $window.mouse_y < 840
           ingredient = @book.ingredients[0]
+          @budget = @budget - ingredient.cost
+          @designed_features.push(ingredient)
+          ingredient.features.each do |feature|
+            index = @features_to_design.index(@features_to_design.find {|f| f.name == feature.name})
+            @features_to_design.delete_at index
+          end
+        elsif $window.mouse_x < WINDOW_WIDTH/2 + 220 && $window.mouse_x > WINDOW_WIDTH/2 + 70 && $window.mouse_y > 790 && $window.mouse_y < 840
+          ingredient = @book.ingredients[1]
           @budget = @budget - ingredient.cost
           @designed_features.push(ingredient)
           ingredient.features.each do |feature|
@@ -73,8 +100,8 @@ class DesignState < WaterfallState
         300, 1080, color,
         200)
       @features_to_design.each_with_index do |feature, idx|
-        icon.draw(300 + 10*idx, 930, 201)
-        feature.big_image.draw(300 + 10*idx, 930, 202)
+        icon.draw(300 + 170*idx, 930, 201)
+        feature.big_image.draw(300 + 170*idx, 930, 202)
       end
       @designed_features.each_with_index do |feature, idx|
         feature.draw_task(300 + 10*(idx + @features_to_design.length), 930)

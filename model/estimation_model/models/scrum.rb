@@ -68,7 +68,7 @@ class SprintExecution < Stage
   end
 
   def get_next_stage(project)
-    if project.ticks_passed >= 600
+    if project.ticks_passed >= 300
       nil
     else
       SprintPlanning.new @actions_in_progress

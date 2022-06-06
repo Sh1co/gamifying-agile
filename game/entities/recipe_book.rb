@@ -5,7 +5,8 @@ class RecipeBook
   def initialize(window)
     @window = window
     @ingredients = [
-      FeatherIngredient.new(window)
+      FeatherIngredient.new(window),
+      DonutIngredient.new(window)
     ]
   end
 
@@ -22,6 +23,7 @@ class RecipeBook
     book.draw(0, 0, 300)
 
     @ingredients[0].draw(0)
+    @ingredients[1].draw(1)
     # budget = Gosu::Image.from_text(
     #   $window, "Budget: #{@budget}",
     #   Gosu.default_font_name, 50)
