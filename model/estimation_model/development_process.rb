@@ -1,4 +1,5 @@
 require_relative './task'
+require_relative './skill'
 
 class DevelopmentProcess
   attr_reader :stage,
@@ -14,15 +15,18 @@ class DevelopmentProcess
   end
 
   def collect_requirements(project)
-    @backlog = @backlog + (project.features - @memoized_features).map {|f| RequirementAnalysisTask.new f}
+    @backlog = @backlog + (project.features - @memoized_features).map {|f| RequirementAnalysisTask.new f, [Skill.new('analysis', rand(1..10))]}
     @backlog = @backlog.reject {|t| !project.features.include?(t.feature)}
     @memoized_features = project.features
+  end
+
+  def find_anomaly(anomaly)
+    @backlog = @backlog + [anomaly]
   end
 
   def tick(project)
     if @stage.ready_to_progress?(project, self)
       next_stage = @stage.get_next_stage(project)
-      # print "PROGRESSING TO STAGE #{next_stage.to_s} \n"
       if next_stage.nil?
         print "DONE!"
         @terminated = true

@@ -17,13 +17,17 @@ class RequirementCollection < Stage
   end
 
   def get_next_stage(project)
-    RequirementAnalysis.new
+    RequirementAnalysis.new project.team
   end
 end
 
 class RequirementAnalysis < Stage
-  def initialize
-    super
+  def initialize(team)
+    super()
+    #assign roles
+    team.each do |team_member|
+      team_member.set_role(Role.new "analytic")
+    end
   end
 
   def tick(project, process)
@@ -47,13 +51,17 @@ class RequirementAnalysis < Stage
   end
 
   def get_next_stage(project)
-    Implementation.new
+    Implementation.new project.team
   end
 end
 
 class Implementation < Stage
-  def initialize
-    super
+  def initialize(team)
+    super()
+    #assign roles
+    team.each do |team_member|
+      team_member.set_role(Role.new "developer")
+    end
   end
 
   def tick(project, process)
@@ -77,13 +85,17 @@ class Implementation < Stage
   end
 
   def get_next_stage(project)
-    Testing.new
+    Testing.new project.team
   end
 end
 
 class Testing < Stage
-  def initialize
-    super
+  def initialize(team)
+    super()
+    #assign roles
+    team.each do |team_member|
+      team_member.set_role(Role.new "tester")
+    end
   end
 
   def ready_to_progress?(project, process)
@@ -100,7 +112,7 @@ class Testing < Stage
     @actions_in_progress = @actions_in_progress.select {|a| !a.done}
     free_team_members =  project.team.select {|tm| !tm.is_busy}
     if free_team_members.length > 0
-      process.backlog.select {|t| t.is_a?(TestingTask) && !t.is_worked_on}.each do |task|
+      process.backlog.select {|t| (t.is_a?(TestingTask) || t.is_a?(Anomaly)) && !t.is_worked_on}.each do |task|
         free_team_member = free_team_members.pop
         if free_team_member.nil?
           break
