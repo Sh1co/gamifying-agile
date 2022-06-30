@@ -37,6 +37,7 @@ class SprintExecution < Stage
         end
       end
 
+      #TODO needs to change
       if best_skill.name == "testing"
         team_member.set_role(Role.new "tester")
       elsif best_skill.name == "development"
@@ -104,6 +105,7 @@ class SprintExecution < Stage
   end
 
   def get_next_stage(project)
+    #TODO Make the number of ticks changable in initialization not hard coded
     if project.ticks_passed >= 300
       nil
     else
