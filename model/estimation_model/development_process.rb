@@ -15,7 +15,7 @@ class DevelopmentProcess
   end
 
   def collect_requirements(project)
-    @backlog = @backlog + (project.features - @memoized_features).map {|f| RequirementAnalysisTask.new f, [Skill.new('analysis', rand(1..10))]}
+    @backlog = @backlog + (project.features - @memoized_features).map {|f| f.get_next_task}
     @backlog = @backlog.reject {|t| !project.features.include?(t.feature)}
     @memoized_features = project.features
   end
