@@ -1,8 +1,11 @@
 require_relative 'spec'
 
 class Anomaly < Spec
-  def initialize(feature, required_skills)
-    super
-    @time_required = rand(1..2)
+  attr_accessor :found
+
+  def initialize(required_skills, task_type, time_required, feature)
+    super(required_skills, task_type, time_required)
+    @found = false
+    @feature = feature
   end
 end

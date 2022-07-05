@@ -22,32 +22,50 @@ class Action
 
   def tick(process)
     @time_spent += 1
+
+
+    if @task_type == "anomaly"
+      if @time_spent == @task.time_required
+        @task.feature.completed += @task.time_required
+        process.backlog.delete @task
+        @team_member.is_busy = false
+        @done = true
+      end
+      return
+    end
+
     #generate anomalies
     probability = 0
+    gap = 0
     if @task.required_skills.each do |skill|
         tm_skill = @team_member.skills.find {|s| s.name == skill.name}
         if tm_skill.nil?
-          probability += 10
+          probability += 100
+          gap += skill.level
         else
+          gap += (skill.level - tm_skill.level)
           probability += (skill.level - tm_skill.level).fdiv ANOMALIES_REGULATOR
         end
       end
     end
     probability = [[probability, 0].max, 1].min
     if rand <= probability
-      @task.feature.add_anomaly(Anomaly.new @task.feature, [Skill.new(@task_type, rand(1..5))])
+      skills_total = @task.required_skills.reduce(0) {|acc, skill| acc + skill.level}
+      time_max = (gap / skills_total) * ANOMALIES_REGULATOR
+      @task.feature.add_anomaly(Anomaly.new  [Skill.new(@task_type, rand(1..5))], "anomaly", rand(1..time_max), @task.feature)
     end
 
 
     if @task_type == "testing"
       #find anomalies
-      unless @task.feature.anomalies.length == 0
+      unfound_anomalies =  @task.feature.anomalies.select {|an| !an.found}
+      unless unfound_anomalies.length == 0
         testing_skill = @team_member.skills.find {|s| s.name == "testing"}
           unless testing_skill.nil?
             probability = testing_skill.level.fdiv 10
             if rand <= probability
-              process.find_anomaly(@task.feature.anomalies[0])
-              @task.feature.delete_anomaly(@task.feature.anomalies[0])
+              process.find_anomaly(unfound_anomalies[0])
+              unfound_anomalies[0].found = true
             end
           end
       end
@@ -60,24 +78,6 @@ class Action
         process.backlog.push next_task
       end
       @task.feature.completed += @task.difficulty
-      @team_member.is_busy = false
-      @done = true
-    end
-  end
-end
-
-
-
-class AnomalyFixingAction < Action
-  def initialize(team_member, task)
-    super
-    @task_class = Anomaly
-  end
-
-  def tick(process)
-    @time_spent += 1
-    if @time_spent == @task.time_required
-      process.backlog.delete @task
       @team_member.is_busy = false
       @done = true
     end
