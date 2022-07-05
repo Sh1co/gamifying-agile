@@ -27,7 +27,7 @@ class Action
     if @task.required_skills.each do |skill|
         tm_skill = @team_member.skills.find {|s| s.name == skill.name}
         if tm_skill.nil?
-          probability += 0.5
+          probability += 10
         else
           probability += (skill.level - tm_skill.level).fdiv ANOMALIES_REGULATOR
         end
@@ -55,8 +55,11 @@ class Action
 
     if @time_spent == @task.time_required
       process.backlog.delete @task
-      process.backlog.push @task.feature.get_next_task
-      @task.feature.completed += @task.feature.analysis_difficulty
+      next_task = @task.feature.get_next_task
+      if !next_task.nil? 
+        process.backlog.push next_task
+      end
+      @task.feature.completed += @task.difficulty
       @team_member.is_busy = false
       @done = true
     end
