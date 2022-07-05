@@ -2,9 +2,9 @@ class Spec
   attr_reader :time_required,
               :required_skills,
               :difficulty,
-              :anomalies,
               :task_type
-  attr_accessor :is_worked_on
+  attr_accessor :is_worked_on,
+                :feature
 
   def initialize(required_skills, task_type, time_required)
     @required_skills = required_skills
@@ -12,14 +12,5 @@ class Spec
     @time_required = time_required
     @task_type = task_type
     @is_worked_on = false
-    @anomalies = []
-  end
-
-  def add_anomaly(anomaly)
-    @anomalies.push anomaly
-  end
-
-  def delete_anomaly(anomaly)
-    @anomalies = @anomalies.select {|a| a != anomaly}
   end
 end

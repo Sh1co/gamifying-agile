@@ -11,6 +11,7 @@ test_feature = Feature.new([analysis_task, development_task, testing_task])
 nxt_task = test_feature.get_next_task
 
 while !nxt_task.nil? do
-    print nxt_task.task_type, "\n"
+    print nxt_task.task_type," ", nxt_task.feature.difficulty, "\n"
+
     nxt_task = test_feature.get_next_task
 end
