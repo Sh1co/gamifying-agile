@@ -1,6 +1,7 @@
 require_relative './development_process'
 require_relative './feature'
 require_relative './models/scrum'
+require_relative './Generators/FeatureGenerator'
 
 class Project
   attr_reader :team,
@@ -57,7 +58,8 @@ class Project
         @features.delete_at(rand(@features.length))
       end
       add_tasks = rand 0..5
-      @features = @features + Array.new(add_tasks) {|i| Feature.new rand(1..5), rand(1..5), rand(1..5)}
+      max_knowledge = @features.reduce(0) {|acc, f| [acc, f.tasks[0].knowledge].max}
+      @features = @features + Array.new(add_tasks) {|i| FeatureGenerator.GetFeature(max_knowledge + i)}
     end
     @ticks_passed += 1
   end
