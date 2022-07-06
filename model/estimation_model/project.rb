@@ -23,18 +23,18 @@ class Project
   end
 
   def get_task_type_distribution
-    analysis = @development_process.backlog.select {|t| t.is_a? RequirementAnalysisTask}.length
-    implementation = @development_process.backlog.select {|t| t.is_a? ImplementationTask}.length
-    testing = @development_process.backlog.select {|t| t.is_a? TestingTask}.length
-    anomaly = @development_process.backlog.select {|t| t.is_a? Anomaly}.length
+    analysis = @development_process.backlog.select {|t| t.task_type == "analysis"}.length
+    implementation = @development_process.backlog.select {|t| t.task_type == "development"}.length
+    testing = @development_process.backlog.select {|t| t.task_type == "testing"}.length
+    anomaly = @development_process.backlog.select {|t| t.task_type == "anomaly"}.length
     [analysis, implementation, testing, anomaly]
   end
 
   def get_cumulative_flow_diagram
-    analysis = @development_process.stage.actions_in_progress.select {|a| a.is_a? RequirementAnalysisAction}.length
-    implementation = @development_process.stage.actions_in_progress.select {|a| a.is_a? ImplementationAction}.length
-    testing = @development_process.stage.actions_in_progress.select {|a| a.is_a? TestingAction}.length
-    anomaly = @development_process.stage.actions_in_progress.select {|a| a.is_a? AnomalyFixingAction}.length
+    analysis = @development_process.stage.actions_in_progress.select {|a| a.task_type == "analysis"}.length
+    implementation = @development_process.stage.actions_in_progress.select {|a| a.task_type == "development"}.length
+    testing = @development_process.stage.actions_in_progress.select {|a| a.task_type == "testing"}.length
+    anomaly = @development_process.stage.actions_in_progress.select {|a| a.task_type == "anomaly"}.length
     completed = @features.select {|f| f.completed == f.difficulty}.length
     [analysis, implementation, testing, anomaly, completed]
   end
