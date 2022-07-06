@@ -7,15 +7,15 @@ require_relative './model/estimation_model/development_process'
 require_relative './model/estimation_model/Generators/FeatureGenerator'
 
 team1 = [
-  TeamMember.new("TESTER", [Skill.new('testing', 9), Skill.new('development', 3), Skill.new('analysis', 1), Skill.new('communication', 2), Skill.new('learning', 3)]),
-  TeamMember.new("DEVELOPER", [Skill.new('testing', 1), Skill.new('development', 9), Skill.new('analysis', 1), Skill.new('communication', 4), Skill.new('learning', 6)]),
-  TeamMember.new("ANALYTIC", [Skill.new('testing', 2), Skill.new('development', 3), Skill.new('analysis', 9), Skill.new('communication', 7), Skill.new('learning', 4)])
+  TeamMember.new("TESTER", [Skill.new('testing', 5), Skill.new('development', 3), Skill.new('analysis', 1), Skill.new('communication', 2), Skill.new('learning', 3)]),
+  TeamMember.new("DEVELOPER", [Skill.new('testing', 1), Skill.new('development', 5), Skill.new('analysis', 1), Skill.new('communication', 4), Skill.new('learning', 6)]),
+  TeamMember.new("ANALYTIC", [Skill.new('testing', 2), Skill.new('development', 3), Skill.new('analysis', 5), Skill.new('communication', 7), Skill.new('learning', 4)])
 ]
 
 team2 = [
-  TeamMember.new("TESTER", [Skill.new('testing', 9), Skill.new('development', 3), Skill.new('analysis', 1), Skill.new('communication', 2), Skill.new('learning', 3)]),
-  TeamMember.new("DEVELOPER", [Skill.new('testing', 1), Skill.new('development', 9), Skill.new('analysis', 1), Skill.new('communication', 4), Skill.new('learning', 6)]),
-  TeamMember.new("ANALYTIC", [Skill.new('testing', 2), Skill.new('development', 3), Skill.new('analysis', 9), Skill.new('communication', 7), Skill.new('learning', 4)])
+  TeamMember.new("TESTER", [Skill.new('testing', 5), Skill.new('development', 3), Skill.new('analysis', 1), Skill.new('communication', 2), Skill.new('learning', 3)]),
+  TeamMember.new("DEVELOPER", [Skill.new('testing', 1), Skill.new('development', 5), Skill.new('analysis', 1), Skill.new('communication', 4), Skill.new('learning', 6)]),
+  TeamMember.new("ANALYTIC", [Skill.new('testing', 2), Skill.new('development', 3), Skill.new('analysis', 5), Skill.new('communication', 7), Skill.new('learning', 4)])
 ]
 
 

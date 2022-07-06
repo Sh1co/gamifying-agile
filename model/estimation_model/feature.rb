@@ -24,7 +24,6 @@ class Feature
 
   def add_anomaly(anomaly)
     @anomalies.push anomaly
-    @difficulty += anomaly.time_required
   end
 
   def delete_anomaly(anomaly)

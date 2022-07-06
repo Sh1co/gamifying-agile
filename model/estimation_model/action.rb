@@ -49,7 +49,6 @@ class Action
     #incase the task is an anomaly
     if @task_type == "anomaly"
       if @time_spent == @task.time_required
-        @task.feature.completed += @task.time_required
         process.backlog.delete @task
         @team_member.is_busy = false
         @done = true
