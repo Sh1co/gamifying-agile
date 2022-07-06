@@ -26,7 +26,7 @@ class RequirementAnalysis < Stage
     super()
     #assign roles
     team.each do |team_member|
-      team_member.set_role(Role.new "analytic")
+      team_member.set_role(Role.new "analysis")
     end
   end
 
@@ -36,18 +36,18 @@ class RequirementAnalysis < Stage
     @actions_in_progress = @actions_in_progress.select {|a| !a.done}
     free_team_members =  project.team.select {|tm| !tm.is_busy}
     if free_team_members.length > 0
-      process.backlog.select {|t| t.is_a?(RequirementAnalysisTask) && !t.is_worked_on}.each do |task|
+      process.backlog.select {|t| t.task_type == "analysis" && !t.is_worked_on}.each do |task|
         free_team_member = free_team_members.pop
         if free_team_member.nil?
           break
         end
-        @actions_in_progress.push RequirementAnalysisAction.new(free_team_member, task)
+        @actions_in_progress.push Action.new(free_team_member, task)
       end
     end
   end
 
   def ready_to_progress?(project, process)
-    process.backlog.reduce {|acc, task| acc && task.class == ImplementationTask}
+    process.backlog.reduce {|acc, task| acc && task.task_type == "development"}
   end
 
   def get_next_stage(project)
@@ -60,7 +60,7 @@ class Implementation < Stage
     super()
     #assign roles
     team.each do |team_member|
-      team_member.set_role(Role.new "developer")
+      team_member.set_role(Role.new "development")
     end
   end
 
@@ -70,18 +70,18 @@ class Implementation < Stage
     @actions_in_progress = @actions_in_progress.select {|a| !a.done}
     free_team_members =  project.team.select {|tm| !tm.is_busy}
     if free_team_members.length > 0
-      process.backlog.select {|t| t.is_a?(ImplementationTask) && !t.is_worked_on}.each do |task|
+      process.backlog.select {|t| t.task_type == "development" && !t.is_worked_on}.each do |task|
         free_team_member = free_team_members.pop
         if free_team_member.nil?
           break
         end
-        @actions_in_progress.push ImplementationAction.new free_team_member, task
+        @actions_in_progress.push Action.new free_team_member, task
       end
     end
   end
 
   def ready_to_progress?(project, process)
-    process.backlog.reduce {|acc, task| acc && task.class == TestingTask}
+    process.backlog.reduce {|acc, task| acc && task.task_type == "testing"}
   end
 
   def get_next_stage(project)
@@ -94,12 +94,12 @@ class Testing < Stage
     super()
     #assign roles
     team.each do |team_member|
-      team_member.set_role(Role.new "tester")
+      team_member.set_role(Role.new "testing")
     end
   end
 
   def ready_to_progress?(project, process)
-    process.backlog.select {|t| t.is_a? TestingTask}.length == 0
+    process.backlog.select {|t| t.task_type == "testing"}.length == 0
   end
 
   def get_next_stage(project)
@@ -112,12 +112,12 @@ class Testing < Stage
     @actions_in_progress = @actions_in_progress.select {|a| !a.done}
     free_team_members =  project.team.select {|tm| !tm.is_busy}
     if free_team_members.length > 0
-      process.backlog.select {|t| (t.is_a?(TestingTask) || t.is_a?(Anomaly)) && !t.is_worked_on}.each do |task|
+      process.backlog.select {|t| (t.task_type == "testing" || t.task_type == "anomaly") && !t.is_worked_on}.each do |task|
         free_team_member = free_team_members.pop
         if free_team_member.nil?
           break
         end
-        @actions_in_progress.push TestingAction.new free_team_member, task
+        @actions_in_progress.push Action.new free_team_member, task
       end
     end
   end
