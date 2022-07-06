@@ -1,11 +1,15 @@
 class TeamMember
-  attr_reader :name, :skills, :role
-  attr_accessor :is_busy
+  attr_reader :name, 
+              :skills, 
+              :role
+  attr_accessor :is_busy,
+                :knowledge
 
   def initialize(name, skills)
     @name = name
     @skills = skills
     @is_busy = false
+    @knowledge = 0
   end
 
   def set_role(role)

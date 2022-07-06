@@ -4,7 +4,8 @@ class Spec
               :difficulty,
               :task_type
   attr_accessor :is_worked_on,
-                :feature
+                :feature,
+                :knowledge
 
   def initialize(required_skills, task_type, time_required)
     @required_skills = required_skills
@@ -12,5 +13,6 @@ class Spec
     @time_required = time_required
     @task_type = task_type
     @is_worked_on = false
+    @knowledge = 0
   end
 end
