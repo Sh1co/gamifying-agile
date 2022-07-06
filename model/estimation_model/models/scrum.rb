@@ -32,7 +32,7 @@ class SprintExecution < Stage
     team.each do |team_member|
       best_skill = team_member.skills[0]
       team_member.skills.each do |skill|
-        if skill.level > best_skill.level
+        if skill.level > best_skill.level && skill.name != "learning" && skill.name != "communication"
           best_skill = skill
         end
       end
@@ -66,7 +66,7 @@ class SprintExecution < Stage
       end
       sorted_tasks.each do |task|
         free_team_member = free_team_members.find do |tm|
-          if task.is_a? Anomaly
+          if task.task_type == "anomaly"
             true
           else
             tm.role.name == task.task_type

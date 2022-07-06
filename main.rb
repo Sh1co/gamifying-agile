@@ -4,22 +4,23 @@ require_relative './model/estimation_model/team'
 require_relative './model/estimation_model/models/waterfall'
 require_relative './model/estimation_model/models/scrum'
 require_relative './model/estimation_model/development_process'
+require_relative './model/estimation_model/Generators/FeatureGenerator'
 
 team1 = [
-  TeamMember.new("TESTER", [Skill.new('testing', 9), Skill.new('development', 3), Skill.new('analysis', 1)]),
-  TeamMember.new("DEVELOPER", [Skill.new('testing', 1), Skill.new('development', 9), Skill.new('analysis', 1)]),
-  TeamMember.new("ANALYTIC", [Skill.new('testing', 2), Skill.new('development', 3), Skill.new('analysis', 9)])
+  TeamMember.new("TESTER", [Skill.new('testing', 9), Skill.new('development', 3), Skill.new('analysis', 1), Skill.new('communication', 2), Skill.new('learning', 3)]),
+  TeamMember.new("DEVELOPER", [Skill.new('testing', 1), Skill.new('development', 9), Skill.new('analysis', 1), Skill.new('communication', 4), Skill.new('learning', 6)]),
+  TeamMember.new("ANALYTIC", [Skill.new('testing', 2), Skill.new('development', 3), Skill.new('analysis', 9), Skill.new('communication', 7), Skill.new('learning', 4)])
 ]
 
 team2 = [
-  TeamMember.new("TESTER", [Skill.new('testing', 9), Skill.new('development', 3), Skill.new('analysis', 1)]),
-  TeamMember.new("DEVELOPER", [Skill.new('testing', 1), Skill.new('development', 9), Skill.new('analysis', 1)]),
-  TeamMember.new("ANALYTIC", [Skill.new('testing', 2), Skill.new('development', 3), Skill.new('analysis', 9)])
+  TeamMember.new("TESTER", [Skill.new('testing', 9), Skill.new('development', 3), Skill.new('analysis', 1), Skill.new('communication', 2), Skill.new('learning', 3)]),
+  TeamMember.new("DEVELOPER", [Skill.new('testing', 1), Skill.new('development', 9), Skill.new('analysis', 1), Skill.new('communication', 4), Skill.new('learning', 6)]),
+  TeamMember.new("ANALYTIC", [Skill.new('testing', 2), Skill.new('development', 3), Skill.new('analysis', 9), Skill.new('communication', 7), Skill.new('learning', 4)])
 ]
 
 
-project_waterfall = Project.new(team1, RequirementCollection.new, Array.new(200) {|i| Feature.new rand(1..5), rand(1..5), rand(1..5)})
-project_scrum = Project.new(team2, SprintPlanning.new([], team2), Array.new(200) {|i| Feature.new rand(1..5), rand(1..5), rand(1..5)})
+project_waterfall = Project.new(team1, RequirementCollection.new, Array.new(200) {|i| FeatureGenerator.GetFeature(i)})
+project_scrum = Project.new(team2, SprintPlanning.new([], team2), Array.new(200) {|i| FeatureGenerator.GetFeature(i)})
 
 stat_w = project_waterfall.simulate
 stat_s = project_scrum.simulate

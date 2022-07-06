@@ -26,8 +26,8 @@ class Action
       communication_skill = @team_member.skills.find {|s| s.name == "communication"}
       if !communication_skill.nil?
         knowledge_gap = @task.knowledge - @team_member.knowledge
-        if knowledge_gap <= communication_skill
-          suitable_member = @process.team.find {|s| s.knowledge >= @task.knowledge}
+        if knowledge_gap <= communication_skill.level
+          suitable_member = process.team.find {|s| s.knowledge >= @task.knowledge}
           if !suitable_member.nil?
             @team_member.knowledge = @task.knowledge
             return
@@ -37,9 +37,9 @@ class Action
 
       learning_skill = @team_member.skills.find {|s| s.name == "learning"}
       if learning_skill.nil?
-        learning_skill = 1
+        learning_skill = Skill.new('learning', 1)
       end
-      @team_member.knowledge += learning_skill
+      @team_member.knowledge += learning_skill.level
       @team_member.knowledge = [@team_member.knowledge, @task.knowledge].min
       return
     end
@@ -59,23 +59,24 @@ class Action
 
 
     #generate anomalies
-    probability = 0
+    probability = 0.0
     gap = 0
     if @task.required_skills.each do |skill|
         tm_skill = @team_member.skills.find {|s| s.name == skill.name}
         if tm_skill.nil?
-          probability += 100
+          probability += 100.1
           gap += skill.level
         else
-          gap += (skill.level - tm_skill.level)
-          probability += (skill.level - tm_skill.level).fdiv ANOMALIES_REGULATOR
+          gap += [(skill.level - tm_skill.level),0].max
+          tobeAdded = (skill.level - tm_skill.level).fdiv ANOMALIES_REGULATOR
+          probability += tobeAdded
         end
       end
     end
     probability = [[probability, 0].max, 1].min
     if rand <= probability
       skills_total = @task.required_skills.reduce(0) {|acc, skill| acc + skill.level}
-      time_max = (gap / skills_total) * ANOMALIES_REGULATOR
+      time_max = (1.0 * gap / skills_total * ANOMALIES_REGULATOR).floor
       @task.feature.add_anomaly(Anomaly.new  [Skill.new(@task_type, rand(1..5))], "anomaly", rand(1..time_max), @task.feature)
     end
 

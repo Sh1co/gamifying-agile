@@ -99,7 +99,7 @@ class Testing < Stage
   end
 
   def ready_to_progress?(project, process)
-    process.backlog.select {|t| t.task_type == "testing"}.length == 0
+    process.backlog.select {|t| t.task_type == "testing" || t.task_type == "anomaly"}.length == 0
   end
 
   def get_next_stage(project)

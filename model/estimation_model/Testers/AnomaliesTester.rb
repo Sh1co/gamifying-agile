@@ -14,7 +14,7 @@ sherif = TeamMember.new("TESTER", [Skill.new('testing', 11), Skill.new('developm
 
 test_feature = Feature.new([analysis_task, testing_task])
 
-test_process = DevelopmentProcess.new(Stage.new)
+test_process = DevelopmentProcess.new(Stage.new, [sherif])
 test_process.backlog.push test_feature.get_next_task
 
 while !test_process.backlog.empty? do
