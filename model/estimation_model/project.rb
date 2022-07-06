@@ -10,7 +10,7 @@ class Project
               :statistics
 
   def initialize(team, stage, features)
-    @development_process = DevelopmentProcess.new stage
+    @development_process = DevelopmentProcess.new stage, team
     @team = team
     @features = features
     @ticks_passed = 0

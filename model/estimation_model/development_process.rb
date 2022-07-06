@@ -5,13 +5,15 @@ class DevelopmentProcess
   attr_reader :stage,
               :backlog,
               :terminated,
-              :memoized_features
+              :memoized_features,
+              :team
 
-  def initialize(stage)
+  def initialize(stage, team)
     @stage = stage
     @terminated = false
     @backlog = []
     @memoized_features = []
+    @team = team
   end
 
   def collect_requirements(project)

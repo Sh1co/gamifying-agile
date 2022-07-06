@@ -23,6 +23,18 @@ class Action
   def tick(process)
     #check and get required knowledge for the task
     if @task.knowledge > @team_member.knowledge
+      communication_skill = @team_member.skills.find {|s| s.name == "communication"}
+      if !communication_skill.nil?
+        knowledge_gap = @task.knowledge - @team_member.knowledge
+        if knowledge_gap <= communication_skill
+          suitable_member = @process.team.find {|s| s.knowledge >= @task.knowledge}
+          if !suitable_member.nil?
+            @team_member.knowledge = @task.knowledge
+            return
+          end
+        end
+      end
+
       learning_skill = @team_member.skills.find {|s| s.name == "learning"}
       if learning_skill.nil?
         learning_skill = 1
