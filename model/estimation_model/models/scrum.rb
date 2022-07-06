@@ -91,7 +91,37 @@ class SprintExecution < Stage
     if project.ticks_passed >= 300
       nil
     else
-      SprintPlanning.new @actions_in_progress, project.team
+      SprintReview.new @actions_in_progress, project.team
     end
+  end
+end
+
+class SprintReview < Stage
+  def initialize(actions_in_progress, team)
+    super()
+    team.each {|team_member| team_member.reset_role}
+    @actions_in_progress = actions_in_progress
+  end
+
+  def tick(project, process)
+    @ticks_passed += 1
+    self.share_knowledge(process.team)
+  end
+
+  def share_knowledge(team)
+    max_knowledge = team.reduce(0){|acc,t| [acc,t.knowledge].max}
+    team.each do |t|
+      communication_skill = t.skills.find {|s| s.name == "communication"}
+      t.knowledge+= communication_skill.level
+      t.knowledge = [t.knowledge , max_knowledge].min
+    end
+  end
+
+  def ready_to_progress?(project, process)
+    @ticks_passed == 1
+  end
+
+  def get_next_stage(project)
+    SprintPlanning.new @actions_in_progress, project.team
   end
 end
