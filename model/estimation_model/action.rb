@@ -21,9 +21,20 @@ class Action
   end
 
   def tick(process)
+    #check and get required knowledge for the task
+    if @task.knowledge > @team_member.knowledge
+      learning_skill = @team_member.skills.find {|s| s.name == "learning"}
+      if learning_skill.nil?
+        learning_skill = 1
+      end
+      @team_member.knowledge += learning_skill
+      @team_member.knowledge = [@team_member.knowledge, @task.knowledge].min
+      return
+    end
+
     @time_spent += 1
 
-
+    #incase the task is an anomaly
     if @task_type == "anomaly"
       if @time_spent == @task.time_required
         @task.feature.completed += @task.time_required
@@ -33,6 +44,7 @@ class Action
       end
       return
     end
+
 
     #generate anomalies
     probability = 0
@@ -71,6 +83,7 @@ class Action
       end
     end
 
+    #check if task is complete
     if @time_spent == @task.time_required
       process.backlog.delete @task
       next_task = @task.feature.get_next_task
